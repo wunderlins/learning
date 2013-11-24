@@ -78,16 +78,11 @@ function ghistory() {
 	giggle .
 }
 
-alias gc=gcommit
-alias gd=gdiff
-alias gpc=gpush_commit
-alias gp="git push"
-alias gm=gmerge
-alias gh=ghistory
-alias gs="git status"
-
-#push;
-
-
-
+alias gp="git push"       # push
+alias gc=gcommit          # graphical commit
+alias gcp=gpush_commit    # commit and push 
+alias gd=gdiff            # graphical diff
+alias gm=gmerge           # graphical merge tool
+alias gh=ghistory         # excellent history tool
+alias gs="git status"     # show status
 
