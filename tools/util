@@ -24,6 +24,17 @@ function gpush_usage() {
 	EOF
 }
 
+function gtag_usage() {
+	cat <<- EOF
+		Usage: gtag <tag> <message>
+		
+		TAGNAME is the git tag, message is the commit message as usually 
+		provided to :
+		$ git tag -m"<message>" <TAGNAME>
+		
+	EOF
+}
+
 function gcommit() {
 	if [[ "$#" -ne 1 ]]; then
 		meld .
@@ -78,6 +89,19 @@ function ghistory() {
 	giggle .
 }
 
+function gtag() {
+	if [[ "$#" -ne 2 ]]; then
+		  echo "illegal number of parameters";
+		  gtag_usage;
+		  echo ""
+			echo "Aborting, exit code 1"
+		  return 1;
+	fi
+
+	git tag -m "$2" "$1" && git push origin "$1"
+
+}
+
 # shortcuts
 alias gp="git push"       # push
 alias gc=gcommit          # graphical commit
@@ -87,5 +111,5 @@ alias gm=gmerge           # graphical merge tool
 alias gh=ghistory         # excellent history tool
 alias gs="git status"     # show status
 alias gmv="git mv"        # git move shortcut
-
+alias gt=gtag             # tag a version and share (push tag to origin)
 
