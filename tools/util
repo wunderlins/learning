@@ -78,6 +78,7 @@ function ghistory() {
 	giggle .
 }
 
+# shortcuts
 alias gp="git push"       # push
 alias gc=gcommit          # graphical commit
 alias gcp=gpush_commit    # commit and push 
@@ -85,4 +86,6 @@ alias gd=gdiff            # graphical diff
 alias gm=gmerge           # graphical merge tool
 alias gh=ghistory         # excellent history tool
 alias gs="git status"     # show status
+alias gmv="git mv"        # git move shortcut
+
 
