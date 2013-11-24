@@ -49,7 +49,7 @@ bool set_point(uint8_t x, uint8_t y, bool state, uint8_t *matrix);
 // are off.
 uint8_t matrix[8] = {1, 0, 0, 0, 0, 0, 0, 0};
 
-int main(int argc, char* argv) {
+int main(int argc, char* argv[]) {
 	
 	// let's look at the initial state of our matrix, the first 
 	// LED on the 2nd row should be on, evreything else should be off
