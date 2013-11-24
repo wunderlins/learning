@@ -44,16 +44,27 @@ function gcommit() {
 }
 
 function gpush_commit() {
+	num=$#
 	# check if param 1, the message, is supplied
-	if [[ "$#" -ne 1 ]]; then
+	if [[ "$#" -lt 1 ]]; then
 		  echo "illegal number of parameters";
 		  gpush_usage;
 		  echo ""
 			echo "Aborting, exit code 1"
 		  return 1;
 	fi
-
-	git commit -am "$1" && git push
+	
+	comment="$1"
+	shift
+	
+	#echo "$# $num"
+	#return 0;
+	
+	if [[ "$num" -gt 1 ]]; then
+		git commit -m "$comment" "$@" && git push
+	else
+		git commit -am "$comment" && git push
+	fi
 }
 
 function gdiff() {
@@ -112,4 +123,5 @@ alias gh=ghistory         # excellent history tool
 alias gs="git status"     # show status
 alias gmv="git mv"        # git move shortcut
 alias gt=gtag             # tag a version and share (push tag to origin)
+alias ga="git add"        # add file to git
 
