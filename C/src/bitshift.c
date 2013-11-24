@@ -6,7 +6,7 @@
  * 
  * Every row in our 8 int array has 8 bits which can be 0 or 1:
  * 
- *      0   1   2   3   4   5   6   7   <-- bits per row
+ * 	   0   1   2   3   4   5   6   7   <-- bits per row
  * 	  +---+---+---+---+---+---+---+---+
  * 	0 |   |   |   |   l   |   |   |   | matrix[0]
  * 	  +---+---+---+---+---+---+---+---+
