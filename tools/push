@@ -5,7 +5,7 @@
 # abbrevations to often used git commands. This should be easier on your 
 # writsts. Include this file in your .porfile (preferred) or .bashrc.
 #
-# Obviously you need to have git installed, colordiff is also expected.
+# Obviously you need to have git installed, meld is also expected.
 #
 # EXIT CODES
 #  1 - parameter error
@@ -14,7 +14,7 @@
 # Author: 2013, Simon Wunderlin, <swunderlin@gmail.com>
 
 # program usage
-function push_usage() {
+function gpush_usage() {
 	cat <<- EOF
 		Usage: push <message>
 		
@@ -24,28 +24,56 @@ function push_usage() {
 	EOF
 }
 
-function push() {
+function gcommit() {
+	if [[ "$#" -ne 1 ]]; then
+		meld .
+	else
+		meld "$@"
+	fi
+}
+
+function gpush() {
 	# check if param 1, the message, is supplied
 	if [[ "$#" -ne 1 ]]; then
 		  echo "illegal number of parameters";
-		  push_usage;
+		  gpush_usage;
+		  echo ""
 			echo "Aborting, exit code 1"
-		  exit 1;
+		  return 1;
 	fi
 
 	git commit -am "$1" && git push
 }
 
-function diff() {
-	if [[ ! `which colordiff` ]]; then
+function gdiff() {
+	if [[ ! `which meld` ]]; then
 		echo "Please install colordiff"
+		echo ""
 		echo "Aborting, exit code 2"
-		exit 2;
+		return 2;
 	fi
 	
-	git diff | colordiff | less -R;
+	#git diff | colordiff | less -R;
+	git difftool -y -t meld;
 }
 
+function gmerge() {
+	if [[ ! `which meld` ]]; then
+		echo "Please install colordiff"
+		echo "Aborting, exit code 2"
+		return 2;
+	fi
+	
+	git mergetool -y -t meld
+}
+
+alias gc=gcommit
+alias gd=gdiff
+alias gp=gpush
+alias gm=gmerge
+
 #push;
+
+
 
 
