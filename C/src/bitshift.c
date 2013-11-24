@@ -45,7 +45,8 @@ void print_matrix(char*);
 bool set_point(uint8_t x, uint8_t y, bool state, uint8_t *matrix);
 
 // this is our matrix array. It contians 8 integer with 8 bits.
-// we do initialize every int to 0 which means all LEDs are off.
+// we do initialize every int to 0 (ecept the first) which means all LEDs 
+// are off.
 uint8_t matrix[8] = {1, 0, 0, 0, 0, 0, 0, 0};
 
 int main(int argc, char* argv) {
