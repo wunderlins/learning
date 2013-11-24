@@ -5,7 +5,7 @@
 # abbrevations to often used git commands. This should be easier on your 
 # writsts. Include this file in your .porfile (preferred) or .bashrc.
 #
-# Obviously you need to have git installed, meld is also expected.
+# Obviously you need to have git installed, meld and giggle is also expected.
 #
 # EXIT CODES
 #  1 - parameter error
@@ -47,7 +47,7 @@ function gpush() {
 
 function gdiff() {
 	if [[ ! `which meld` ]]; then
-		echo "Please install colordiff"
+		echo "Please install meld"
 		echo ""
 		echo "Aborting, exit code 2"
 		return 2;
@@ -59,7 +59,7 @@ function gdiff() {
 
 function gmerge() {
 	if [[ ! `which meld` ]]; then
-		echo "Please install colordiff"
+		echo "Please install meld"
 		echo "Aborting, exit code 2"
 		return 2;
 	fi
@@ -67,10 +67,23 @@ function gmerge() {
 	git mergetool -y -t meld
 }
 
+function ghistory() {
+	if [[ ! `which giggle` ]]; then
+		echo "Please install giggle"
+		echo ""
+		echo "Aborting, exit code 2"
+		return 2;
+	fi
+	
+	giggle .
+}
+
 alias gc=gcommit
 alias gd=gdiff
 alias gp=gpush
 alias gm=gmerge
+alias gh=ghistory
+alias gs="git status"
 
 #push;
 
