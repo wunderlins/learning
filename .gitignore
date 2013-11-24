@@ -1,4 +1,4 @@
-# Object files
+*# Object files
 *.o
 *.ko
 
@@ -16,3 +16,7 @@
 *.exe
 *.out
 *.app
+
+# no backup files
+*~
+*.bak
