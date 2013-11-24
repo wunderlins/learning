@@ -141,11 +141,16 @@ int main(int argc, char* argv) {
  */
 void print_matrix(char* comment) {
 	
-	printf("%s\n", comment);
+	printf("%s\n\n", comment);
+	printf("   0 1 2 3 4 5 6 7\n");
+	printf("   ---------------\n");
 	
 	// loop over all rows, from top to bottom, used
 	// use option -std=c99 or -std=gnu99 to compile with gcc
 	for (uint8_t r=0; r<8; r++) {
+		
+		printf("%d: ", r);
+		
 		// now loop bit by bit over this integer, find out if bit is high or low.
 		for (uint8_t c=0; c<8; c++) {
 			
