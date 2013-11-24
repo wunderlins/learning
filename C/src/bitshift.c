@@ -114,6 +114,21 @@ int main(int argc, char* argv) {
 	set_point(3, 3, false, &matrix); // remember, we start to count at 0
 	print_matrix("4, 4 unset");
 	
+	// set 1 row high
+	matrix[0] = 255;
+	matrix[1] = 255;
+	print_matrix("row 1 and 2 high, ya mann");
+	
+	// set 1 row low
+	matrix[0] = 0;
+	print_matrix("row 1 low, hangover");
+	
+	// set 1 col high
+	for (uint8_t r=0; r<8; r++)
+		set_point(7, r, true, &matrix); // remember, we start to count at 0
+	
+	print_matrix("col 8 high");
+	
 	return 0;
 }
 
@@ -190,9 +205,9 @@ bool set_point(uint8_t x, uint8_t y, bool state, uint8_t *matrix) {
 	if (y>7) return false;
 	
 	if (state) // set a bit
-		matrix[x] = matrix[x] | (1<<y);
+		matrix[y] = matrix[y] | (1<<x);
 	else // unset a bit
-		matrix[x] = (~(1<<y) & matrix[x]);
+		matrix[y] = (~(1<<x) & matrix[y]);
 	
 	return true;
 }
