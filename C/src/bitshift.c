@@ -39,10 +39,7 @@
 #include <stdio.h>    // used with printf
 #include <inttypes.h> // required for uintN_t with gcc
 #include <stdbool.h>
-
-// declarations
-void print_matrix(char*);
-bool set_point(uint8_t x, uint8_t y, bool state, uint8_t *matrix);
+#include "bitshift.h"
 
 // this is our matrix array. It contians 8 integer with 8 bits.
 // we do initialize every int to 0 (ecept the first) which means all LEDs 
