@@ -20,3 +20,4 @@
 # no backup files
 *~
 *.bak
+*.pyc
