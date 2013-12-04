@@ -8,8 +8,10 @@ clean:
 	$(RM) pk || true
 	$(RM) pki || true
 	$(RM) pks || true
+	$(RM) pkl || true
 
 all: clean
 	$(CC) $(CC_ARGS) -o $(exe_name) pk.c
 	$(LN) $(exe_name) $(exe_name)i
 	$(LN) $(exe_name) $(exe_name)s
+	$(LN) $(exe_name) $(exe_name)l

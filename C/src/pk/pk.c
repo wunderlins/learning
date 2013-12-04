@@ -10,11 +10,11 @@
 #define DEBUG 1
 #define PATH_SEPERATOR "/"
 
-#define NUM_ACTIONS 2
-const char* action[NUM_ACTIONS]       = {"apt-get", "apt-cache"};
-const char action_root[NUM_ACTIONS]   = {true,      false};
-const char action_code[NUM_ACTIONS]   = {'i',       's'};
-const char* action_param[NUM_ACTIONS] = {"install", "search"};
+#define NUM_ACTIONS 3
+const char* action[NUM_ACTIONS]       = {"apt-get", "apt-cache", "dpkg"};
+const int  action_root[NUM_ACTIONS]   = {true,      false,       false};
+const char action_code[NUM_ACTIONS]   = {'i',       's',         'l'};
+const char* action_param[NUM_ACTIONS] = {"install", "search",    "-l"};
 #define NUM_SU_EXEC 2
 const char* su_exec[NUM_SU_EXEC]      = {"sudo", "su"};
 
@@ -35,19 +35,22 @@ int main(int argc, char **argv, char **envp) {
 		return 1;
 	}
 	
-	char action = file[len-1];
+	char action_c = file[len-1];
 	
 	#if DEBUG > 0
-		printf("%s %d %c\n", file, (int) len, action);
+		printf("%s %d %c\n", file, (int) len, action_c);
 	#endif
 	
 	// check if this action is known
 	bool found = false;
 	int  index_action = 0;
 	for (int i=0; i<NUM_ACTIONS; i++) {
-		if (action == action_code[i]) {
+		if (action_c == action_code[i]) {
 			found = true;
 			index_action = i;
+			#if DEBUG > 0
+				printf("index_action: %d\n", index_action);
+			#endif
 			break;
 		}
 	}
@@ -123,8 +126,20 @@ int main(int argc, char **argv, char **envp) {
 		strcat(command, " ");
 	}
 	
+	strcat(command, action[index_action]);
+	strcat(command, " ");
+	strcat(command, action_param[index_action]);
+	strcat(command, " ");
 	
+	for(int i=1; i<argc; i++) {
+		strcat(command, argv[i]);
+		strcat(command, " ");
+	}
 	
+	printf("%s\n", command);
+	
+	// system call
+	system((const char*) command);
 
 	return EXIT_SUCCESS;
 }
