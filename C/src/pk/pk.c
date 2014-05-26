@@ -1,3 +1,5 @@
+#!/usr/bin/env C -Wall -std=c99
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <libgen.h>
@@ -7,7 +9,7 @@
 #include <sys/types.h>
 //#include <sys/stat.h> /* struct stat, fchmod (), stat (), S_ISREG, S_ISDIR */
 
-#define DEBUG 1
+#define DEBUG 0
 #define PATH_SEPERATOR "/"
 
 #define NUM_ACTIONS 3
@@ -136,7 +138,9 @@ int main(int argc, char **argv, char **envp) {
 		strcat(command, " ");
 	}
 	
-	printf("%s\n", command);
+	#if DEBUG > 0
+		printf("%s\n", command);
+	#endif
 	
 	// system call
 	system((const char*) command);
