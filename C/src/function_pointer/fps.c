@@ -10,26 +10,36 @@
 
 typedef struct sphere {
 	int diameter;
-	void (*volume)(int);
-} sphere;
+	double (*volume)(int);
+} sphere_t;
 
-void volume(int);
-void volume(int r) {
-	double volume = (4/3) * M_PI * pow(r, 3);
-	printf( "volume: %f\n", volume);
+double volume(int);
+sphere_t get_sphere(int);
+double sphere_volume(sphere_t*);
+
+double volume(int diameter) {
+	return (double) ((4/3) * M_PI * pow((diameter/2), 3));
+}
+
+sphere_t get_sphere(int r) {
+	sphere_t s;
+	s.diameter = r;
+	s.volume = volume;
+	
+	return s;
+}
+
+double sphere_volume(sphere_t *s) {
+	return s->volume(s->diameter);
 }
 
 int main(int argc, char **argv) {
 	
 	// create a sphere
-	sphere s;
-	s.diameter = 3;
+	sphere_t s = get_sphere(3);
 	
-	// assign pointer to a function
-	s.volume = &volume;
-	
-	// run referenced function
-	s.volume(s.diameter);
+	double res = sphere_volume(&s);
+	printf("%f\n", res);
 	
 	return 0;
 }
