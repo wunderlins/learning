@@ -15,7 +15,7 @@ typedef struct package {
 	
 	int version_major, version_minor, version_patchlevel;
 	
-	struct meta_t {
+	struct {
 		char* name;
 		char* description;
 	} meta;
