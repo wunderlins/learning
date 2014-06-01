@@ -5,14 +5,28 @@
  */
 
 #include <stdio.h>
+
 /**
- * Declare a bit-field that can hold a date
+ * Declare bit-fields that can hold a date
+ *
+ * Format:
+ *   type name : number_of_bits;
+ *
+ * Types:
+ *   _Bool, int, signed int, unsigned int (or implementation dependent).
  */
 struct Date {
-	unsigned int day   : 5;  // 0-31, 32 bits for day of the month
-	unsigned int month : 4;  // 0-15, 16 bits for month, 1 is January
-	signed int year    : 22; // -2097152-2097151, probably more, check word size
-	_Bool isDST        : 1;  // True if daylight saving is in effect
+	/// 0-31, 32 bits for day of the month
+	unsigned int day   : 5;
+	
+	/// 0-15, 16 bits for month, 1 is January
+	unsigned int month : 4;
+	
+	/// -2097152-2097151, probably more, check word size
+	signed int year    : 22;
+	
+	/// True if daylight saving is in effect
+	_Bool isDST        : 1;
 };
 
 /**
