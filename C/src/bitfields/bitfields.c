@@ -1,7 +1,7 @@
 /**
  * Bit-Fields Example
  *
- * (c) 2014, Simon Wunderlin, <swudnerlin()gmailDTcom>
+ * (c) 2014, Simon Wunderlin, <swunderlin()gmailDTcom>
  */
 
 #include <stdio.h>
