@@ -1,3 +1,31 @@
 #!/usr/bin/env bash
 
-echo "$@"
+filename=$(basename "$1")
+filename="${filename%.*}"
+echo $filename
+
+[ ! -d /tmp/runcache ] && mkdir /tmp/runcache;
+
+# need to compile?
+echo 1
+if [ ! -x "/tmp/runcache/$filename" ]; then
+	echo 2
+	mkdir -p /tmp/runcache/
+	# get rid of shebang line in C program and compile it
+	tail -n +2 "$1" > /tmp/runcache/$filename.c
+	echo 3
+	gcc -Wall -std=c99 $CC_OPTS -o \
+		/tmp/runcache/$filename \
+		/tmp/runcache/$filename.c
+	echo 4
+fi
+echo 5
+
+# first parameter is the old executable, 
+# remove it and poitn to the new one
+shift 
+echo 6
+
+/tmp/runcache/$filename "$@"
+echo 7
+

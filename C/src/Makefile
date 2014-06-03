@@ -5,9 +5,13 @@ RM=/bin/rm
 GCC=/usr/bin/gcc
 
 all: clean libbitshift bitshift
+	$(MAKE) -C bitfields
+	$(MAKE) -C function_pointer
+	$(MAKE) -C pk
+	$(MAKE) -C struct
 
 clean:
-	$(RM) $(LIBNAME) lib$(LIBNAME).o lib$(LIBNAME).so *~ || true
+	$(RM) $(LIBNAME) lib$(LIBNAME).o lib$(LIBNAME).so *~ 2>/dev/null || true
 
 bitshift:
 	$(GCC) $(CC_OPTS) -o $(LIBNAME) $(LIBNAME).c

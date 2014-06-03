@@ -1,4 +1,4 @@
-#!/usr/bin/env C -Wall -std=c99
+// #!/usr/bin/env C -Wall -std=c99
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -112,7 +112,7 @@ int main(int argc, char **argv, char **envp) {
 		//printf("a\n");
 		//printf("%s\n", su_executable);
 		if (!su_executable) {
-			printf("Needed elevated privileges, no exec found.\n");
+			printf("Need elevated privileges, no exec found.\n");
 			return 3;
 		}
 		
