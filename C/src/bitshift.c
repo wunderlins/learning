@@ -106,10 +106,10 @@ int main(int argc, char* argv[]) {
 	// implementation for more etails.
 	
 	// set bit 4 in row 4
-	set_point(3, 3, true, &matrix); // remember, we start to count at 0
+	set_point(3, 3, true, matrix); // remember, we start to count at 0
 	print_matrix("4, 4 set");
 	
-	set_point(3, 3, false, &matrix); // remember, we start to count at 0
+	set_point(3, 3, false, matrix); // remember, we start to count at 0
 	print_matrix("4, 4 unset");
 	
 	// set 1 row high
@@ -123,7 +123,7 @@ int main(int argc, char* argv[]) {
 	
 	// set 1 col high
 	for (uint8_t r=0; r<8; r++)
-		set_point(7, r, true, &matrix); // remember, we start to count at 0
+		set_point(7, r, true, matrix); // remember, we start to count at 0
 	
 	print_matrix("col 8 high");
 	
