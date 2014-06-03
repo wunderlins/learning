@@ -5,6 +5,10 @@
  */
 
 #include <stdio.h>
+#include <string.h>
+#include <limits.h>
+#include <sys/utsname.h>
+#include <errno.h>
 
 /**
  * Declare bit-fields that can hold a date
@@ -39,8 +43,29 @@ int main(int argc, char **argv) {
 	
 	if (birthday.isDST)
 		printf("+1DST");
-	
 	printf("\n");
+	
+	//printf("length of birthday.day is %d\n", sizeof(birthday.day));
+	printf("size of int is %lu\n", (int) CHAR_BIT * sizeof(int));
+	
+	// system information
+	struct utsname s;
+	int res = uname(&s);
+	if (res != 0) {
+		printf("Error running uname(), return %d, errno: %d '%s'\n", res, errno, strerror(errno));
+		return 1;
+	}
+	
+	printf("Sysinfo:\n");
+	printf(" - sysname:    %s\n", s.sysname);
+	printf(" - nodename:   %s\n", s.nodename);
+	printf(" - release:    %s\n", s.release);
+	printf(" - version:    %s\n", s.version);
+	printf(" - machine:    %s\n", s.machine);
+	#ifdef _GNU_SOURCE
+	printf(" - domainname: %s\n", s.domainname);
+	#endif
+	
 	fflush(stdout);
 
 	return 0;
