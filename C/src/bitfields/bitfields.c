@@ -7,8 +7,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
-#include <sys/utsname.h>
-#include <errno.h>
+
+#include <sys/utsname.h> // added for system info
+#include <errno.h>       // required for system info
 
 /**
  * Declare bit-fields that can hold a date
