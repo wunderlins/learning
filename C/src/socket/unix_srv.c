@@ -1,10 +1,14 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <libgen.h>
+#include <limits.h>
 #include <sys/socket.h>
 #include <sys/un.h>
-#include <stdlib.h>
 
 //char *socket_path = "./socket";
-char *socket_path = "\0hidden";
+char *socket_path = "\0hidden"; // this seems to be a trick to hide the socket in the current working directory (pwd)
 
 int main(int argc, char *argv[]) {
 	struct sockaddr_un addr;
@@ -12,6 +16,12 @@ int main(int argc, char *argv[]) {
 	int fd,cl,rc;
 
 	if (argc > 1) socket_path=argv[1];
+
+	char realp[4096];
+	//char *realp = malloc(sizeof(char) * (strlen(dir) + strlen(b)));
+	realpath(socket_path, realp);
+	printf("socket@ %s/%s\n", realp, basename(socket_path));
+	fflush(stdout);
 
 	if ( (fd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
 		perror("socket error");

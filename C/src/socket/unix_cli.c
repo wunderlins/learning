@@ -1,8 +1,11 @@
-#include <sys/socket.h>
-#include <sys/un.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
+#include <limits.h>
+#include <libgen.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 
 //char *socket_path = "./socket";
 char *socket_path = "\0hidden";
