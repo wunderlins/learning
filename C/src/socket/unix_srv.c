@@ -6,14 +6,21 @@
 #include <limits.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+#include "message_type.h"
 
-//char *socket_path = "./socket";
-char *socket_path = "\0hidden"; // this seems to be a trick to hide the socket in the current working directory (pwd)
+char *socket_path = "./socket";
+//char *socket_path = "\0hidden"; // this seems to be a trick to hide the socket in the current working directory (pwd)
 
 int main(int argc, char *argv[]) {
 	struct sockaddr_un addr;
 	char buf[100];
 	int fd,cl,rc;
+
+	uint8_t payload[3] = {65,66,0};
+	message_t m = message(1, sizeof(payload), payload);
+
+	printf("type: %d, lenght: %d, data: [%c, %c, %c]\n", 
+	       m.type, m.length, m.data[0], m.data[1], m.data[2]);
 
 	if (argc > 1) socket_path=argv[1];
 
