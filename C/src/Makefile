@@ -9,6 +9,7 @@ all: clean libbitshift bitshift
 	$(MAKE) -C function_pointer
 	$(MAKE) -C pk
 	$(MAKE) -C struct
+	$(MAKE) -C signal
 
 clean:
 	$(RM) $(LIBNAME) lib$(LIBNAME).o lib$(LIBNAME).so *~ 2>/dev/null || true
