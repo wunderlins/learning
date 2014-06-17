@@ -101,6 +101,7 @@ void usage(char* progname) {
 	       "  3) Process not running\n"
 	       "  4) Failed to send signal\n"
 	       "  5) Missing Parameter\n\n"
+	       "See sig.h for supported signals.\n\n"
 	       , progname);
 }
 

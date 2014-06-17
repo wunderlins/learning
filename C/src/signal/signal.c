@@ -1,36 +1,5 @@
 /**
- * 2014, Simon Wunderlin, swunderlinATgmailDTcom, GPL2+
- */
-
-#define _GNU_SOURCE // required by strsignal on linux
-
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <unistd.h>
-
-#include "sig.h"
-
-void sig_handler(int sig) {
-
-	const char *signame = signum_to_signame(sig);
-	printf("Signal [%d] %s, %s\n", sig, signame, strsignal(sig));
-
-	switch (sig) {
-		case SIGQUIT:
-			printf("Caught SIGQUIT, exiting.\n");
-			exit(0);
-			break;
-		case SIGINT:
-			printf("Caught SIGINT, exiting.\n");
-			exit(0);
-			break;
-	}
-}
-
-/**
- * from man 7 signal:
+ * from man 7 signal (Debian GNU/Linux 7):
  *
  * Standard Signals
  *
@@ -123,9 +92,61 @@ void sig_handler(int sig) {
  *
  * Where defined, SIGUNUSED is synonymous with SIGSYS  on  most  architec‐
  * tures.
+ *
+ * 2014, Simon Wunderlin, swunderlinATgmailDTcom, GPL2+
  */
 
+#define _GNU_SOURCE // required by strsignal on linux
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <unistd.h>
+
+#include "sig.h"
+
+/**
+ * handle signal
+ *
+ * will always exit upon SIGQUIT, SIGTERM, SIGINT. Cannot catch SIGKILL and
+ * SIGSTOP.
+ */
+void sig_handler(int sig) {
+
+	const char *signame = signum_to_signame(sig);
+	printf("Signal [%d] %s, %s\n", sig, signame, strsignal(sig));
+
+	switch (sig) {
+		case SIGTERM:
+			printf("Caught SIGTERM, exiting.\n");
+			exit(0);
+			break;
+		case SIGQUIT:
+			printf("Caught SIGQUIT, exiting.\n");
+			exit(0);
+			break;
+		case SIGINT:
+			printf("Caught SIGINT, exiting.\n");
+			exit(0);
+			break;
+	}
+}
+
+/**
+ * main function, register signal handlers
+ *
+ * registers all known signals from sig.h as signal handler.
+ */
 int main(int argc, char *argv[]) {
+
+	int n = 0;
+	for (n = 0; n < ARRAY_SIZE(sys_signame); n++) {
+		printf("Registering %02d %s\n", sys_signame[n].val, sys_signame[n].name);
+		signal(sys_signame[n].val, sig_handler);
+	}
+
+	/*
 	signal(SIGHUP, sig_handler); //        1       Term    Hangup detected on controlling terminal or death of controlling process
 	signal(SIGINT, sig_handler); //        2       Term    Interrupt from keyboard
 	signal(SIGQUIT, sig_handler); //       3       Core    Quit from keyboard
@@ -145,6 +166,7 @@ int main(int argc, char *argv[]) {
 	signal(SIGTSTP, sig_handler); //   18,20,24    Stop    Stop typed at tty
 	signal(SIGTTIN, sig_handler); //   21,21,26    Stop    tty input for background process
 	signal(SIGTTOU, sig_handler); //   22,22,27    Stop    tty output for background process
+	*/
 
 	printf("Process id: %d\n", getpid());
 	printf("Capturing signals ...\n");
