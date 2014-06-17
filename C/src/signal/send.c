@@ -54,7 +54,7 @@ int signum(char* signame)	{
 		return -2;
 
 	// if the first 3 chars are "SIG", remove them
-	if (signame[0] == 'S' && signame[0] == 'I' && signame[0] == 'G') {
+	if (signame[0] == 'S' && signame[1] == 'I' && signame[2] == 'G') {
 		memcpy(sig, &(signame[3]), strlen(signame)-3);
 		sig[strlen(signame)-3] = '\0';
 	} else {
@@ -123,6 +123,7 @@ int main(int argc, char *argv[]) {
 
 	// convert signal name to a signal number
 	int sign = signum(argv[1]);
+
 	// convert string pid to long
 	pid_t pid = char2int(argv[2]);
 

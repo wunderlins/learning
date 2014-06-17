@@ -13,7 +13,9 @@
 #include "sig.h"
 
 void sig_handler(int sig) {
-	printf("Signal %d %s\n", sig, strsignal(sig));
+
+	const char *signame = signum_to_signame(sig);
+	printf("Signal [%d] %s, %s\n", sig, signame, strsignal(sig));
 
 	switch (sig) {
 		case SIGHUP:
@@ -147,6 +149,7 @@ int main(int argc, char *argv[]) {
 	signal(SIGTTIN, sig_handler); //   21,21,26    Stop    tty input for background process
 	signal(SIGTTOU, sig_handler); //   22,22,27    Stop    tty output for background process
 
+	printf("Process id: %d\n", getpid());
 	printf("Capturing signals ...\n");
 
 	useconds_t usec = 1000000L;

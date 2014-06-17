@@ -24,3 +24,6 @@ pid:
 
 test:
 	./signal&
+
+diff:
+	git diff | colordiff | less -R
