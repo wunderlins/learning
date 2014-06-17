@@ -1,4 +1,6 @@
 /**
+ * Linux 3.2 signal definitions
+ *
  * 2014, Simon Wunderlin, swunderlinATgmailDTcom, GPL2+
  */
 
@@ -87,6 +89,13 @@ struct signv {
 #endif
 };
 
+/**
+ * Convert signal name into signal number
+ *
+ * Expects a signal name in the form of SIGKILL or KILL as parameter 1.
+ *
+ * Will return a valid signal number or -1 for unknown signals.
+ */
 int signame_to_signum(char *sig) {
 	size_t n;
 	for (n = 0; n < ARRAY_SIZE(sys_signame); n++) {
@@ -94,4 +103,22 @@ int signame_to_signum(char *sig) {
 			return sys_signame[n].val;
 	}
 	return -1;
+}
+
+/**
+ * Convert signal number into signal name
+ *
+ * Expects a signal number as parameter 1.
+ *
+ * Will return a valid signal name in the form of SIGKILL or KILL or NULL for
+ * unknown signals.
+ */
+const char *signum_to_signame(int sig) {
+	size_t n;
+	for (n = 0; n < ARRAY_SIZE(sys_signame); n++) {
+		//if (!strcasecmp(sys_signame[n].name, sig))
+		if (sys_signame[n].val == sig)
+			return sys_signame[n].name;
+	}
+	return NULL;
 }

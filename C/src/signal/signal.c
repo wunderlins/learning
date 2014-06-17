@@ -10,6 +10,8 @@
 #include <signal.h>
 #include <unistd.h>
 
+#include "sig.h"
+
 void sig_handler(int sig) {
 	printf("Signal %d %s\n", sig, strsignal(sig));
 
