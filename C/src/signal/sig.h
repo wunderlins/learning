@@ -1,3 +1,4 @@
+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
 
 struct signv {
 	const char *name;
@@ -82,3 +83,11 @@ struct signv {
 #endif
 };
 
+int signame_to_signum(char *sig) {
+	size_t n;
+	for (n = 0; n < ARRAY_SIZE(sys_signame); n++) {
+		if (!strcasecmp(sys_signame[n].name, sig))
+			return sys_signame[n].val;
+	}
+	return -1;
+}
