@@ -1,3 +1,5 @@
+# 2014, Simon Wunderlin, swunderlinATgmailDTcom, GPL2+
+
 .PHONY: all signal clean kill test send
 end = "================================================"
 

@@ -1,3 +1,7 @@
+/**
+ * 2014, Simon Wunderlin, swunderlinATgmailDTcom, GPL2+
+ */
+
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
 
 struct signv {

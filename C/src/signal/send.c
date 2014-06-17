@@ -16,7 +16,7 @@
  *  4) Failed to send signal
  *  5) Missing Parameter
  *
- * TODO: add usage()
+ * 2014, Simon Wunderlin, swunderlinATgmailDTcom, GPL2+
  */
 
 // #define _GNU_SOURCE // required by strsignal on linux

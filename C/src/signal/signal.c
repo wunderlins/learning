@@ -1,3 +1,7 @@
+/**
+ * 2014, Simon Wunderlin, swunderlinATgmailDTcom, GPL2+
+ */
+
 #define _GNU_SOURCE // required by strsignal on linux
 
 #include <stdio.h>
