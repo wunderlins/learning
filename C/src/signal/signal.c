@@ -18,9 +18,6 @@ void sig_handler(int sig) {
 	printf("Signal [%d] %s, %s\n", sig, signame, strsignal(sig));
 
 	switch (sig) {
-		case SIGHUP:
-			printf("Caught SIGHUP, reloading config.\n");
-			break;
 		case SIGQUIT:
 			printf("Caught SIGQUIT, exiting.\n");
 			exit(0);
