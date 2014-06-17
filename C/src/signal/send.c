@@ -14,6 +14,7 @@
  *  2) Invalid pid
  *  3) Process not running
  *  4) Failed to send signal
+ *  5) Missing Parameter
  *
  * TODO: add usage()
  */
@@ -29,6 +30,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <signal.h>
+#include <libgen.h>
 
 #include "sig.h"
 
@@ -86,12 +88,38 @@ long char2int(char* str) {
 }
 
 /**
+ * print usage information
+ */
+void usage(char* progname) {
+	printf("\nUsage: %s <SIGNAL> <PID>\n\n"
+	       "  SIGNAL is a valid signal name on your linux system\n"
+	       "  PID    is a valid process id\n\n"
+	       "Exit codes:\n"
+	       "  0) Success\n"
+	       "  1) Invalid signal name\n"
+	       "  2) Invalid pid\n"
+	       "  3) Process not running\n"
+	       "  4) Failed to send signal\n"
+	       "  5) Missing Parameter\n\n"
+	       , progname);
+}
+
+/**
  * send a unix signal to a process
  *
  * expects parameter 1 to be a signal name, parameter 2 to be a valid process
  * id.
  */
 int main(int argc, char *argv[]) {
+
+	// get the executable's name
+	char *progname = basename(argv[0]);
+
+	if (argc != 3) {
+		fprintf(stderr, "Missing parameters, aborting.\n");
+		usage(progname);
+		exit(5);
+	}
 
 	// convert signal name to a signal number
 	int sign = signum(argv[1]);
@@ -101,18 +129,21 @@ int main(int argc, char *argv[]) {
 	// validate user input
 	if (sign < 1) {
 		fprintf(stderr, "Invalid signal name %s, %d, aborting.\n", argv[1], sign);
+		usage(progname);
 		exit(1);
 	}
 
 	// check if the pid is greater than 1
 	if (pid < 2) {
 		fprintf(stderr, "Invalid pid %d, aborting.\n", pid);
+		usage(progname);
 		exit(2);
 	}
 
 	// check if pid exists, this might only work on linux
 	if ((kill((pid_t) pid, 0)) == -1) {
 		fprintf(stderr, "Process with pid %d not running, aborting.\n", pid);
+		usage(progname);
 		exit(3);
 	}
 
@@ -121,6 +152,7 @@ int main(int argc, char *argv[]) {
 	int is_active = kill((pid_t) pid, sign);
 	if (is_active != 0) {
 		fprintf(stderr, "Failed to send signal %d to pid %d, aborting.\n", sign, pid);
+		usage(progname);
 		exit(4);
 	}
 
