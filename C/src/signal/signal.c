@@ -103,8 +103,20 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <errno.h>
 
 #include "sig.h"
+
+void shutdown() {
+	int ret = unlink(signals_pid);
+	if(ret < 0) {
+		printf("Error %d, %s\n", errno, strerror(errno));
+		fprintf(stderr, "Failed to remove pid file %s\n", signals_pid);
+		exit(4);
+	}
+}
 
 /**
  * handle signal
@@ -119,14 +131,17 @@ void sig_handler(int sig) {
 
 	switch (sig) {
 		case SIGTERM:
+			shutdown();
 			printf("Caught SIGTERM, exiting.\n");
 			exit(0);
 			break;
 		case SIGQUIT:
+			shutdown();
 			printf("Caught SIGQUIT, exiting.\n");
 			exit(0);
 			break;
 		case SIGINT:
+			shutdown();
 			printf("Caught SIGINT, exiting.\n");
 			exit(0);
 			break;
@@ -140,11 +155,49 @@ void sig_handler(int sig) {
  */
 int main(int argc, char *argv[]) {
 
+	// check if we have a signal description in var/signals.dat, if not create
+	// the file
+
+	// check if var directory exists
+	char var_dir[] = "var";
+	struct stat var_dir_s = {0};
+
+	if (stat(var_dir, &var_dir_s)) {
+		// if not, create it
+
+		printf("%s %d\n", var_dir, (var_dir_s.st_mode & S_IFDIR));
+		//printf("'%s' is %sa directory.\n", var_dir, (var_dir_s.st_mode & S_IFDIR)  : "" ? "not ");
+
+		mode_t process_mask = umask(0);
+		int ret = mkdir((const char *) var_dir, S_IRWXU);
+		//int result_code = mkdir("/usr/local/logs", S_IRWXU | S_IRWXG | S_IRWXO)
+		umask(process_mask);
+
+		// if fails, handle error
+		if (ret == -1) {
+			fprintf(stderr, "failed to create var directory.\n");
+			exit(1);
+		} else
+			fprintf(stdout, "Created directory var.\n");
+	}
+
+	// open var/signals.dat
+	printf("Openging '%s'\n", signals_dat);
+	fps = fopen(signals_dat, "w");
+
+	if(fps == NULL) {
+		printf("Error %d, %s\n", errno, strerror(errno));
+		fprintf(stderr, "Failed to open %s\n", signals_dat);
+		exit(2);
+	}
+
 	int n = 0;
 	for (n = 0; n < ARRAY_SIZE(sys_signame); n++) {
 		printf("Registering %02d %s\n", sys_signame[n].val, sys_signame[n].name);
+		fprintf(fps, "%d %s\n", sys_signame[n].val, sys_signame[n].name);
 		signal(sys_signame[n].val, sig_handler);
 	}
+	fclose(fps);
 
 	/*
 	signal(SIGHUP, sig_handler); //        1       Term    Hangup detected on controlling terminal or death of controlling process
@@ -169,6 +222,17 @@ int main(int argc, char *argv[]) {
 	*/
 
 	printf("Process id: %d\n", getpid());
+
+	// successfully started, write pid file
+	fpp = fopen(signals_pid, "w");
+	if(fpp == NULL) {
+		printf("Error %d, %s\n", errno, strerror(errno));
+		fprintf(stderr, "Failed to open %s\n", signals_pid);
+		exit(3);
+	}
+	fprintf(fpp, "%d", getpid());
+	fclose(fpp);
+
 	printf("Capturing signals ...\n");
 
 	useconds_t usec = 1000000L;

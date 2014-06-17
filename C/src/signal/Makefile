@@ -3,7 +3,7 @@
 .PHONY: all signal clean kill test send
 end = "================================================"
 
-all: signal send
+all: clean signal send
 
 signal:
 	gcc -std=c99 -Wall -o signal signal.c
@@ -14,16 +14,22 @@ send:
 	@echo $(end)
 
 clean:
-		rm -rf signal || true
+	rm -rf signal || true
+	rm -rf send || true
+	@echo $(end)
 
 kill:
 	./bin/kill.sh
+	@echo $(end)
 	
 pid:
 	./bin/pid.sh
+	@echo $(end)
 
 test:
 	./signal&
+	@echo $(end)
 
 diff:
 	git diff | colordiff | less -R
+	

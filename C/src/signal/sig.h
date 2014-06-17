@@ -6,6 +6,16 @@
 
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
 
+/*
+const char *signals_dat = "var/signals.dat";
+const char *signals_pid = "var/signal.pid";
+*/
+
+#include "files.h"
+
+FILE* fps = NULL;
+FILE* fpp = NULL;
+
 struct signv {
 	const char *name;
 	int val;
