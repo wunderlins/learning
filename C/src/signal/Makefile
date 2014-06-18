@@ -28,6 +28,8 @@ send:
 clean:
 	rm -rf signal || true
 	rm -rf send || true
+	rm -rf daemon || true
+	rm -rf redirect || true
 	@echo $(end)
 
 kill:

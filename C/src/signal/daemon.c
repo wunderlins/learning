@@ -1,6 +1,7 @@
 /**
  * daemonize a process
  */
+#define _GNU_SOURCE
 
 #include <stdio.h>
 #include <errno.h>
@@ -85,7 +86,8 @@ int main(int argc, char *argv[]) {
 	useconds_t usec = 1000000L;
 	int i = 0;
 	while(1) {
-		printf("--> %d %d", pid, i++);
+		printf("--> %d %d\n", pid, i++);
+		fflush(stdout);
 		usleep(usec);
 	}
 
