@@ -77,12 +77,12 @@ void daemonize(char *exe, const char *log) {
 	umask(0);
 
 	// Close then reopen standard file descriptors.
-	int logfile_fileno = open(logfile, O_RDWR|O_CREAT|O_APPEND,S_IRUSR|S_IWUSR|S_IRGRP);
-	if (logfile_fileno == -1) {
+	int fout = open(logfile, O_RDWR|O_CREAT|O_APPEND,S_IRUSR|S_IWUSR|S_IRGRP);
+	if (fout == -1) {
 		fprintf(stderr, "failed to open logfile (errno=%d)\n", errno);
 	}
-	dup2(logfile_fileno, STDOUT_FILENO);
-	dup2(logfile_fileno, STDERR_FILENO);
+	dup2(fout, STDOUT_FILENO);
+	dup2(fout, STDERR_FILENO);
 	//close(logfile_fileno);
 	close(STDIN_FILENO);
 	freopen("/dev/null", "w+", stdin);
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
 	useconds_t usec = 1000000L;
 	int i = 0;
 	while(1) {
-		printf("--> %d %d\n", pid, i++);
+		//printf("--> %d %d\n", pid, i++);
 		fflush(stdout);
 		usleep(usec);
 	}

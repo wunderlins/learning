@@ -114,7 +114,7 @@
 #include "sig.h"
 
 void shutdown() {
-	fclose(fout);
+	//fclose(fout);
 	int ret = unlink(signals_pid);
 	if(ret < 0) {
 		printf("Error %d, %s\n", errno, strerror(errno));
@@ -151,7 +151,7 @@ void sig_handler(int sig) {
 			exit(0);
 			break;
 	}
-	//fflush(stdout);
+	fflush(stdout);
 }
 
 /**
@@ -183,6 +183,79 @@ int redirect_io(const char *filename, FILE *fh, mode_t mask) {
 
 	close(fp);
 	return save_out;
+}
+
+/**
+ * Daemonize a process
+ *
+ * This method will detach stdin, stdout and stderr from a terminal. stdout
+ * and stderr will be redirected to log.
+ *
+ * exe is usually argv[0], this parameter is use to detirmine the absolute
+ * path of the executable. from this point, relative paths are resolved in file
+ * names. FIXME: this might not be the best option.
+ *
+ * The main process is fork()'ed twice, detached from process group and
+ * parent processes are terminated.
+ *
+ * the cwd is set to /, however this might be not the best option.
+ */
+void daemonize(char *exe, const char *log) {
+
+	/*
+	char realp[1024] = "";
+	realpath(dirname(exe), realp);
+	strcat(realp, "/");
+	*/
+	char logfile[1024] = "";
+	//strcpy(logfile, realp);
+	strcat(logfile, log);
+	//printf("%s\n", logfile);
+
+	// Fork, allowing the parent process to terminate.
+	pid_t pid = fork();
+	if (pid == -1) {
+		fprintf(stderr, "failed to fork while daemonising (errno=%d)\n", errno);
+	} else if (pid != 0) {
+		_exit(0);
+	}
+
+	// Start a new session for the daemon.
+	if (setsid()==-1) {
+		fprintf(stderr, "failed to become a session leader while "
+				            "daemonising(errno=%d)\n", errno);
+	}
+
+	// Fork again, allowing the parent process to terminate.
+	signal(SIGHUP, SIG_IGN);
+	pid=fork();
+	if (pid == -1) {
+		fprintf(stderr, "failed to fork while daemonising (errno=%d)\n", errno);
+	} else if (pid != 0) {
+		_exit(0);
+	}
+
+	// Set the current working directory to the root directory.
+	if (chdir("/") == -1) {
+		fprintf(stderr, "failed to change working directory while "
+				            "daemonising (errno=%d)\n", errno);
+	}
+
+	printf("pid: %d\n", (int) getpid());
+
+	// Set the user file creation mask to zero.
+	umask(0);
+
+	// Close then reopen standard file descriptors.
+	int logfile_fileno = open(logfile, O_RDWR|O_CREAT|O_APPEND,S_IRUSR|S_IWUSR|S_IRGRP);
+	if (logfile_fileno == -1) {
+		fprintf(stderr, "failed to open logfile (errno=%d), %s\n", errno, logfile);
+	}
+	dup2(logfile_fileno, STDOUT_FILENO);
+	dup2(logfile_fileno, STDERR_FILENO);
+	//close(logfile_fileno);
+	close(STDIN_FILENO);
+	freopen("/dev/null", "w+", stdin);
 }
 
 /**
@@ -242,7 +315,24 @@ int main(int argc, char *argv[]) {
 		exit(2);
 	}
 
+	// done initializing
+	printf("Detatching from terminal ...\n");
+	
+	// daemonize the process, detach it from TTY
+	daemonize(argv[0], realp_signals_out);
+
+	// write pid file
+	fpp = fopen(realp_signals_pid, "w");
+	if(fpp == NULL) {
+		printf("Error %d, %s\n", errno, strerror(errno));
+		fprintf(stderr, "Failed to open %s\n", signals_pid);
+		exit(4);
+	}
+	fprintf(fpp, "%d", getpid());
+	fclose(fpp);
+
 	// subscribe to all known signals and write the signal num=>name to fps
+	printf("Capturing signals ...\n");
 	int n = 0;
 	for (n = 0; n < ARRAY_SIZE(sys_signame); n++) {
 		printf("Registering %02d %s\n", sys_signame[n].val, sys_signame[n].name);
@@ -251,12 +341,7 @@ int main(int argc, char *argv[]) {
 	}
 	fclose(fps);
 
-	// done initializing
-	printf("Detatching from terminal\n");
-	printf("Capturing signals ...\n");
-	
-	// daemonize the process, detach it from TTY /////////////////////////////////
-
+	/*
 	// fork the process
 	pid_t pid = fork();
 	if (pid == -1)
@@ -309,9 +394,10 @@ int main(int argc, char *argv[]) {
 
 	// detach stdout, stderr and redirect them to a file. also
 	// close stdin, because it is of no use for us.
-	/* int old_stdout = */ redirect_io(realp_signals_out, stdout, 0600);
-	/* int old_stderr = */ redirect_io(realp_signals_out, stderr, 0600);
+	/ * int old_stdout = * / redirect_io(realp_signals_out, stdout, 0600);
+	/ * int old_stderr = * / redirect_io(realp_signals_out, stderr, 0600);
 	close(STDIN_FILENO);
+	*/
 
 	/*
 	// Close then reopen stdin, stdout and stderr
@@ -329,12 +415,16 @@ int main(int argc, char *argv[]) {
 	}
 	*/
 
+	printf("started %d\n", getpid());
 	useconds_t usec = 1000000L;
+	int i = 0;
+	pid_t pid = getpid();
 	while(1) {
+		//printf("%d %d\n", i++, pid);
 		usleep(usec);
 	}
 	
-	fclose(fout);
+	//fclose(fout);
 
 	return 0;
 }
