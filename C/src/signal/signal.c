@@ -108,6 +108,8 @@
 #include <errno.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
+#include <libgen.h>
+#include <limits.h>
 
 #include "sig.h"
 
@@ -159,6 +161,11 @@ int main(int argc, char *argv[]) {
 
 	// check if we have a signal description in var/signals.dat, if not create
 	// the file
+	char realp[1024] = "";
+	realpath(dirname(argv[0]), realp);
+	strcat(realp, "/");
+	printf("%s\n", realp);
+	exit(0);
 
 	// check if var directory exists
 	char var_dir[] = "var";
