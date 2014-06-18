@@ -240,7 +240,7 @@ int main(int argc, char *argv[]) {
 	if (setsid()==-1) {
 		fprintf(stderr, "failed to become a session leader while "
 		                "daemonising(errno=%d)",errno);
-		exit(3);
+		exit(5);
 	}
 	
 	signal(SIGHUP,SIG_IGN);
@@ -250,17 +250,17 @@ int main(int argc, char *argv[]) {
 	pid = fork();
 	if (pid == -1) {
 		fprintf(stderr, "failed to fork while daemonising (errno=%d)",errno);
-    exit(2);
+		exit(2);
 	} else if (pid != 0) {
 		exit(0);
 	}
 	//printf("Process id: %d\n", getpid());
-  // successfully started, write pid file
+	// successfully started, write pid file
 	fpp = fopen(signals_pid, "w");
 	if(fpp == NULL) {
 		printf("Error %d, %s\n", errno, strerror(errno));
 		fprintf(stderr, "Failed to open %s\n", signals_pid);
-		exit(3);
+		exit(4);
 	}
 	fprintf(fpp, "%d", getpid());
 	fclose(fpp);
