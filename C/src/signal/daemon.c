@@ -19,14 +19,29 @@
 
 const char logfile_pathname[50] = "var/daemon.log";
 
-void daemonise(char *exe) {
+/**
+ * Daemonize a process
+ *
+ * This method will detach stdin, stdout and stderr from a terminal. stdout
+ * and stderr will be redirected to log.
+ *
+ * exe is usually argv[0], this parameter is use to detirmine the absolute
+ * path of the executable. from this point, relative paths are resolved in file
+ * names. FIXME: this might not be the best option.
+ *
+ * The main process is fork()'ed twice, detached from process group and
+ * parent processes are terminated.
+ *
+ * the cwd is set to /, however this might be not the best option.
+ */
+void daemonize(char *exe, const char *log) {
 
 	char realp[1024] = "";
 	realpath(dirname(exe), realp);
 	strcat(realp, "/");
 	char logfile[1024] = "";
 	strcpy(logfile, realp);
-	strcat(logfile, logfile_pathname);
+	strcat(logfile, log);
 	//printf("%s\n", logfile);
 
 	// Fork, allowing the parent process to terminate.
@@ -78,7 +93,7 @@ void daemonise(char *exe) {
  */
 int main(int argc, char *argv[]) {
 
-	daemonise(argv[0]);
+	daemonize(argv[0], logfile_pathname);
 
 	pid_t pid = getpid();
 	printf("started %d\n", pid);
