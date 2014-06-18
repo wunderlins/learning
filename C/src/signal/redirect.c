@@ -3,6 +3,17 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+/**
+ * redirect a file io to another file
+ *
+ * this is useful to redirect stdou or stderr to a different file. really
+ * required for daemonized jobs.
+ *
+ * The return value is the old filedescriptors fileno (positive int) or a
+ * negative value on error.
+ *  -1: failed to open file
+ *  -2: failed to duplicate old file handle
+ */
 int redirect_io(const char *filename, FILE *fh, mode_t mask) {
 	//char *file = "var/test.log";
 
