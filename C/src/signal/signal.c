@@ -155,6 +155,37 @@ void sig_handler(int sig) {
 }
 
 /**
+ * redirect a file io to another file
+ *
+ * this is useful to redirect stdou or stderr to a different file. really
+ * required for daemonized jobs.
+ *
+ * The return value is the old filedescriptors fileno (positive int) or a
+ * negative value on error.
+ *  -1: failed to open file
+ *  -2: failed to duplicate old file handle
+ */
+int redirect_io(const char *filename, FILE *fh, mode_t mask) {
+	//char *file = "var/test.log";
+
+	if (mask == 0)
+		mask = 0600;
+
+	fflush(fh);
+
+	int fp = open(filename, O_RDWR|O_CREAT|O_APPEND, mask);
+	if (fp == -1)
+		return -1;
+
+	int save_out = dup(fileno(fh));
+	if (dup2(fp, fileno(fh)) == -1)
+		return -2;
+
+	close(fp);
+	return save_out;
+}
+
+/**
  * main function, register signal handlers
  *
  * registers all known signals from sig.h as signal handler.
@@ -211,6 +242,7 @@ int main(int argc, char *argv[]) {
 		exit(2);
 	}
 
+	// subscribe to all known signals and write the signal num=>name to fps
 	int n = 0;
 	for (n = 0; n < ARRAY_SIZE(sys_signame); n++) {
 		printf("Registering %02d %s\n", sys_signame[n].val, sys_signame[n].name);
@@ -219,49 +251,31 @@ int main(int argc, char *argv[]) {
 	}
 	fclose(fps);
 
-	/*
-	signal(SIGHUP, sig_handler); //        1       Term    Hangup detected on controlling terminal or death of controlling process
-	signal(SIGINT, sig_handler); //        2       Term    Interrupt from keyboard
-	signal(SIGQUIT, sig_handler); //       3       Core    Quit from keyboard
-	signal(SIGILL, sig_handler); //        4       Core    Illegal Instruction
-	signal(SIGABRT, sig_handler); //       6       Core    Abort signal from abort(3)
-	signal(SIGFPE, sig_handler); //        8       Core    Floating point exception
-	signal(SIGKILL, sig_handler); //       9       Term    Kill signal
-	signal(SIGSEGV, sig_handler); //      11       Core    Invalid memory reference
-	signal(SIGPIPE, sig_handler); //      13       Term    Broken pipe: write to pipe with no readers
-	signal(SIGALRM, sig_handler); //      14       Term    Timer signal from alarm(2)
-	signal(SIGTERM, sig_handler); //      15       Term    Termination signal
-	signal(SIGUSR1, sig_handler); //   30,10,16    Term    User-defined signal 1
-	signal(SIGUSR2, sig_handler); //   31,12,17    Term    User-defined signal 2
-	signal(SIGCHLD, sig_handler); //   20,17,18    Ign     Child stopped or terminated
-	signal(SIGCONT, sig_handler); //   19,18,25    Cont    Continue if stopped
-	signal(SIGSTOP, sig_handler); //   17,19,23    Stop    Stop process
-	signal(SIGTSTP, sig_handler); //   18,20,24    Stop    Stop typed at tty
-	signal(SIGTTIN, sig_handler); //   21,21,26    Stop    tty input for background process
-	signal(SIGTTOU, sig_handler); //   22,22,27    Stop    tty output for background process
-	*/
-
+	// done initializing
 	printf("Detatching from terminal\n");
 	printf("Capturing signals ...\n");
 	
+	// daemonize the process, detach it from TTY /////////////////////////////////
+
+	// fork the process
 	pid_t pid = fork();
 	if (pid == -1)
 		fprintf(stderr, "Failed to fork\n");
 	else if (pid != 0) 
-		exit(0);
+		exit(0); // exit the original process
 
-	//int r = ioctl(0, TIOCNOTTY, NULL);
-	//if (r != 0)
-	//	fprintf(stderr, "Failed to detatch\n");
-
-	// Start a new session for the daemon.
+	// Start a new session for the daemon. This is important so that we
+	// detatch the new forked process from the process tree
 	if (setsid()==-1) {
 		fprintf(stderr, "failed to become a session leader while "
 		                "daemonising(errno=%d)",errno);
 		exit(5);
 	}
 	
+	// WTF: don't know why I have to send this signal, but it seems to be
+	//      required
 	signal(SIGHUP,SIG_IGN);
+	close(STDIN_FILENO);
 
 	// Fork again, allowing the parent process to terminate.
 	signal(SIGHUP,SIG_IGN);
@@ -286,17 +300,21 @@ int main(int argc, char *argv[]) {
 	
 	if (chdir("/") == -1) {
 		fprintf(stderr, "failed to change working directory "
-	                  "while daemonising (errno=%d)", errno);
+	                  "while daemonizing (errno=%d)", errno);
 		exit(2);
 	}
 	
 	// Set the user file creation mask to zero.
 	umask(0);
-    
-	// Close then reopen stdin, stdout and stderr	
+
+	// detach stdout, stderr and redirect them to a file. also
+	// close stdin, because it is of no use for us.
+	/* int old_stdout = */ redirect_io(realp_signals_out, stdout, 0600);
+	/* int old_stderr = */ redirect_io(realp_signals_out, stderr, 0600);
 	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
+
+	/*
+	// Close then reopen stdin, stdout and stderr
 	if (open("/dev/null",O_RDONLY) == -1) {
 		fprintf(stderr,"failed to reopen stdin while daemonising (errno=%d)", errno);
 		exit(3);
@@ -309,6 +327,7 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr, "failed to reopen stderr while daemonising (errno=%d)", errno);
 		exit(3);
 	}
+	*/
 
 	useconds_t usec = 1000000L;
 	while(1) {
