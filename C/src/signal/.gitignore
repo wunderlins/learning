@@ -1,2 +1,4 @@
 signal
 send
+redirect
+*.log

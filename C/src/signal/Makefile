@@ -1,12 +1,16 @@
 # 2014, Simon Wunderlin, swunderlinATgmailDTcom, GPL2+
 
-.PHONY: all signal clean kill test send
+.PHONY: all signal clean kill test send redirect
 end = "================================================"
 
 all: clean signal send
 
 signal:
 	gcc -std=c99 -Wall -o signal signal.c
+	@echo $(end)
+
+redirect:
+	gcc -std=c99 -Wall -o redirect redirect.c
 	@echo $(end)
 
 send:
