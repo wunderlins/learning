@@ -61,27 +61,6 @@ void daemonise(char **argv) {
 	umask(0);
 
 	// Close then reopen standard file descriptors.
-	/*
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
-	if (open("/dev/null",O_RDONLY) == -1) {
-		fprintf(stderr, "failed to reopen stdin while daemonising (errno=%d)",errno);
-	}
-	if (open("/dev/null",O_WRONLY) == -1) {
-		fprintf(stderr, "failed to reopen stdout while daemonising (errno=%d)",errno);
-	}
-	if (open("/dev/null",O_RDWR) == -1) {
-		fprintf(stderr, "failed to reopen stderr while daemonising (errno=%d)",errno);
-	}
-	*/
-
-	/*
-	if (open("/dev/null", O_RDONLY) == -1) {
-		fprintf(stderr, "failed to reopen stdin while daemonising (errno=%d)\n",errno);
-	}
-	*/
-
 	int logfile_fileno = open(logfile, O_RDWR|O_CREAT|O_APPEND,S_IRUSR|S_IWUSR|S_IRGRP);
 	if (logfile_fileno == -1) {
 		fprintf(stderr, "failed to open logfile (errno=%d)\n", errno);
@@ -90,6 +69,7 @@ void daemonise(char **argv) {
 	dup2(logfile_fileno, STDERR_FILENO);
 	//close(logfile_fileno);
 	close(STDIN_FILENO);
+	freopen("/dev/null", "w+", stdin);
 }
 
 /**
@@ -99,9 +79,15 @@ int main(int argc, char *argv[]) {
 
 	daemonise(argv);
 
-	printf("done\n");
+	pid_t pid = getpid();
+	printf("started %d\n", pid);
 
-	while(1);
+	useconds_t usec = 1000000L;
+	int i = 0;
+	while(1) {
+		printf("--> %d %d", pid, i++);
+		usleep(usec);
+	}
 
 	return 0;
 }

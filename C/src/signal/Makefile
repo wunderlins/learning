@@ -17,6 +17,10 @@ daemon:
 	gcc -std=c99 -Wall -o daemon daemon.c
 	@echo $(end)
 
+killd:
+	./bin/kill_daemon.sh
+	@echo $(end)
+
 send:
 	gcc -std=c99 -Wall -o send send.c
 	@echo $(end)
