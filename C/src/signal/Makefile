@@ -1,6 +1,6 @@
 # 2014, Simon Wunderlin, swunderlinATgmailDTcom, GPL2+
 
-.PHONY: all signal clean kill test send redirect
+.PHONY: all signal clean kill test send redirect daemon
 end = "================================================"
 
 all: clean signal send
@@ -11,6 +11,10 @@ signal:
 
 redirect:
 	gcc -std=c99 -Wall -o redirect redirect.c
+	@echo $(end)
+
+daemon:
+	gcc -std=c99 -Wall -o daemon daemon.c
 	@echo $(end)
 
 send:
