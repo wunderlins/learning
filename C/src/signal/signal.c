@@ -114,6 +114,7 @@
 #include "sig.h"
 
 void shutdown() {
+	fclose(fout);
 	int ret = unlink(signals_pid);
 	if(ret < 0) {
 		printf("Error %d, %s\n", errno, strerror(errno));
@@ -150,6 +151,7 @@ void sig_handler(int sig) {
 			exit(0);
 			break;
 	}
+	//fflush(stdout);
 }
 
 /**
@@ -162,10 +164,19 @@ int main(int argc, char *argv[]) {
 	// check if we have a signal description in var/signals.dat, if not create
 	// the file
 	char realp[1024] = "";
+	char realp_signals_dat[1024] = "";
+	char realp_signals_pid[1024] = "";
+	char realp_signals_out[1024] = "";
+	
 	realpath(dirname(argv[0]), realp);
 	strcat(realp, "/");
-	printf("%s\n", realp);
-	exit(0);
+	
+	strcpy(realp_signals_dat, realp);
+	strcpy(realp_signals_pid, realp);
+	strcpy(realp_signals_out, realp);
+	strcat(realp_signals_dat, signals_dat);
+	strcat(realp_signals_pid, signals_pid);
+	strcat(realp_signals_out, signals_out);
 
 	// check if var directory exists
 	char var_dir[] = "var";
@@ -191,8 +202,8 @@ int main(int argc, char *argv[]) {
 	}
 
 	// open var/signals.dat
-	printf("Openging '%s'\n", signals_dat);
-	fps = fopen(signals_dat, "w");
+	printf("Openging '%s'\n", realp_signals_dat);
+	fps = fopen(realp_signals_dat, "w");
 
 	if(fps == NULL) {
 		printf("Error %d, %s\n", errno, strerror(errno));
@@ -263,7 +274,7 @@ int main(int argc, char *argv[]) {
 	}
 	//printf("Process id: %d\n", getpid());
 	// successfully started, write pid file
-	fpp = fopen(signals_pid, "w");
+	fpp = fopen(realp_signals_pid, "w");
 	if(fpp == NULL) {
 		printf("Error %d, %s\n", errno, strerror(errno));
 		fprintf(stderr, "Failed to open %s\n", signals_pid);
@@ -290,7 +301,7 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr,"failed to reopen stdin while daemonising (errno=%d)", errno);
 		exit(3);
 	}
-	if (open("/dev/null",O_WRONLY) == -1) {
+	if ((fout = freopen(realp_signals_out, "w+", stdout)) == NULL) {
 		fprintf(stderr, "failed to reopen stdout while daemonising (errno=%d)", errno);
 		exit(3);
 	}
@@ -303,6 +314,8 @@ int main(int argc, char *argv[]) {
 	while(1) {
 		usleep(usec);
 	}
+	
+	fclose(fout);
 
 	return 0;
 }

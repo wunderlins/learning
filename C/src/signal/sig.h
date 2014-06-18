@@ -15,6 +15,7 @@ const char *signals_pid = "var/signal.pid";
 
 FILE* fps = NULL;
 FILE* fpp = NULL;
+FILE* fout = NULL;
 
 struct signv {
 	const char *name;
