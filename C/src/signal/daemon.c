@@ -19,10 +19,10 @@
 
 const char logfile_pathname[50] = "var/daemon.log";
 
-void daemonise(char **argv) {
+void daemonise(char *exe) {
 
 	char realp[1024] = "";
-	realpath(dirname(argv[0]), realp);
+	realpath(dirname(exe), realp);
 	strcat(realp, "/");
 	char logfile[1024] = "";
 	strcpy(logfile, realp);
@@ -78,7 +78,7 @@ void daemonise(char **argv) {
  */
 int main(int argc, char *argv[]) {
 
-	daemonise(argv);
+	daemonise(argv[0]);
 
 	pid_t pid = getpid();
 	printf("started %d\n", pid);
