@@ -129,7 +129,7 @@ const char *signum_to_signame(int sig) {
 	for (n = 0; n < ARRAY_SIZE(sys_signame); n++) {
 		//if (!strcasecmp(sys_signame[n].name, sig))
 		if (sys_signame[n].val == sig) {
-			printf("%s\n", sys_signame[n].name);
+			//printf("%s\n", sys_signame[n].name);
 			return sys_signame[n].name;
 		}
 	}

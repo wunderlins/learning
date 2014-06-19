@@ -117,7 +117,7 @@ void shutdown() {
 	//fclose(fout);
 	int ret = unlink(signals_pid);
 	if(ret < 0) {
-		printf("Error %d, %s\n", errno, strerror(errno));
+		//printf("Error %d, %s\n", errno, strerror(errno));
 		fprintf(stderr, "Failed to remove pid file %s\n", signals_pid);
 		exit(4);
 	}
@@ -130,7 +130,8 @@ void shutdown() {
  * SIGSTOP.
  */
 void sig_handler(int sig) {
-
+	
+	//printf("sig\n");
 	const char *signame = signum_to_signame(sig);
 	printf("Signal [%d] %s, %s\n", sig, signame, strsignal(sig));
 
