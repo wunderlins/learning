@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+#include "util.h"
 
 /**
  * Neither function guarantees that any updated directory entries containing
@@ -57,7 +58,8 @@ int main(int argc, char *argv[]) {
 
 		nri = write(fd, "\n", 1);
 		if (nri == -1) { // check for errors
-			printf("failed to write, [%d] %s\n", errno, strerror(errno));
+			//printf("failed to write, [%d] %s\n", errno, strerror(errno));
+			err("failed to write");
 		} else if (nri != 1) {
 			printf("Failed to write all data, expected %d, wrote %d\n",
 					    (int) sizeof(char), (int) nri);
@@ -67,7 +69,8 @@ int main(int argc, char *argv[]) {
 	int ret;
 	ret = fsync (fd);
 	if (ret == -1) {
-		printf("Failed to fsync(), errno %d: %s", errno, strerror(errno));
+		//printf("Failed to fsync(), errno %d: %s", errno, strerror(errno));
+		err("Failed to fsync()");
 	}
 
 	// or when using fdatasync()
