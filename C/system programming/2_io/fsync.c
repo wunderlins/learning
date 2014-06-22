@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
 	char cc[2] = "0";
 	for (i=0; i<10; i++) {
 		for (n=0; n<10; n++) {
-			cc[0] = (n + 0x30);
+			cc[0] = (n + 0x30); // convert int to ascii
 			nrn = write(fd, cc, 1);
 			if (nrn == -1) { // check for errors
 				perror("write");
