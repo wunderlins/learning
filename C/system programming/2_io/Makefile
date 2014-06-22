@@ -4,7 +4,10 @@ CC_OPTS=-Wall
 GCC=/usr/bin/gcc
 BINDIR=../bin/
 
-all: clean read open creat write fsync seek
+all: clean read open creat write fsync seek truncate
+
+truncate:
+	$(GCC) $(CC_OPTS) -o $(BINDIR)truncate truncate.c
 
 seek:
 	$(GCC) $(CC_OPTS) -o $(BINDIR)seek seek.c
