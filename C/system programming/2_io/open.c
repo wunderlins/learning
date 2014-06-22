@@ -13,35 +13,28 @@ int main(int argc, char* argv[]) {
 	/**
 	 * There are numerous flags in the 2nd parameter which control
 	 * access to the file, async io and performance.
-	 *
-	 * When access flags are provided in the flags parameter, the local
-	 * umask is taken into account. On BSD systems, some of the flags (gid
-	 * upon creation) are inherited by the parent directory.
-	 *
-	 * While using the 3rd parameter mode, one gets full control over the file's
-	 * permission bypassing umask entirely. owning group and user still might
-	 * vary over systems. on linux the processes uid/gid are used.
 	 */
 
-	// The following typical creat() call,
+	int fd;
+
 	char *filename1 = "/tmp/whatever1.txt";
 	unlink(filename1);
-	int fd;
-	fd = creat(filename1, 0644);
+	fd = open(filename1, O_WRONLY | O_CREAT | O_TRUNC,
+	                     S_IWUSR | S_IRUSR | S_IWGRP | S_IRGRP | S_IROTH);
 	if (fd == -1) {
-		/* error */
-		;
+		perror("open");
 	}
 
-	// is identical to
-	char *filename2 = "/tmp/whatever2.txt";
+	// a less portable example (in theory) but easier to read. POSIX does allow
+	// the permission bits to be set to other vlaues than 4,2,1. however in
+	// practice all unix systems adhere to this. i wonder how Microsoft Unix
+	// services and cygwin are dealing with this.
+	char *filename2 = "/tmp/whatever3.txt";
 	unlink(filename2);
-	fd = open (filename2, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open(filename2, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 	if (fd == -1) {
-		/* error */
-		;
+		perror("open");
 	}
-
 
 	return 0;
 }
