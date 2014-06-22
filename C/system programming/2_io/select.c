@@ -16,7 +16,20 @@
 #include <sys/time.h>
 #include "util.h"
 
+#define TIMEOUT 5
+
 int main(int argc, char *argv[]) {
+
+	int ret, nfds;
+	struct timeval tv;
+	tv.tv_sec = TIMEOUT;
+	tv.tv_usec = 0;
+
+	fd_set writefds;
+	fd_set readfds;
+
+
+	//ret = select();
 
 	return 0;
 }
