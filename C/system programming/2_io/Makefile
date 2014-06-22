@@ -4,7 +4,10 @@ CC_OPTS=-Wall
 GCC=/usr/bin/gcc
 BINDIR=../bin/
 
-all: clean read open creat write
+all: clean read open creat write fsync
+
+fsync:
+	$(GCC) $(CC_OPTS) -o $(BINDIR)fsync fsync.c
 
 write:
 	$(GCC) $(CC_OPTS) -o $(BINDIR)write write.c
