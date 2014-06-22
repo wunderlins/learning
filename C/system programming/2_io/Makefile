@@ -4,7 +4,7 @@ CC_OPTS=-Wall
 GCC=/usr/bin/gcc
 BINDIR=../bin/
 
-all: clean read open
+all: clean read open creat
 
 read:
 	$(GCC) $(CC_OPTS) -o $(BINDIR)read read.c

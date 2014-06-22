@@ -76,8 +76,15 @@ int main(int argc, char *argv[]) {
 	printf("Attempted to read %d bytes in %d passes, got %d bytes in buffer\n",
 			   (int) rd, pass, (int) strlen(buf));
 	printf("Buffer: '%s'\n", buf);
-
 	close(fd);
+
+	// now read on a closed fd
+	printf("Reading from closed fd\n");
+	ret = read (fd, buf, 10);
+	if (ret == -1) {
+		printf("Reading on closed file descriptor: %d, error %d, %s\n",
+				   fd, errno, strerror(errno));
+	}
 
 	return 0;
 }
