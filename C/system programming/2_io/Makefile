@@ -4,8 +4,11 @@ CC_OPTS=-Wall
 GCC=/usr/bin/gcc
 BINDIR=../bin/
 
-all: clean read open creat write fsync seek truncate
+all: clean read open creat write fsync seek truncate multiplex
 
+multiplex:
+	$(GCC) $(CC_OPTS) -o $(BINDIR)multiplex multiplex.c
+	
 truncate:
 	$(GCC) $(CC_OPTS) -o $(BINDIR)truncate truncate.c
 
