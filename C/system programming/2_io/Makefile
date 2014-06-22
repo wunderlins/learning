@@ -4,7 +4,10 @@ CC_OPTS=-Wall
 GCC=/usr/bin/gcc
 BINDIR=../bin/
 
-all: clean read open creat
+all: clean read open creat write
+
+write:
+	$(GCC) $(CC_OPTS) -o $(BINDIR)write write.c
 
 read:
 	$(GCC) $(CC_OPTS) -o $(BINDIR)read read.c
