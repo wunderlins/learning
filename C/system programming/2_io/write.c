@@ -8,6 +8,13 @@
 /**
  * write example, interface:
  * ssize_t write (int fd, const void *buf, size_t count);
+ *
+ * Consequently, for regular files, you do not need to perform writes in a
+ * loop. However, for other file types—say, sockets—a loop may be required
+ * to guarantee that you really write out all of the requested bytes.
+ * Another benefit of using a loop is that a second call to write() may
+ * return an error revealing what caused the first call to perform only
+ * a partial write (although, again, this situation is not very common).
  */
 
 int main(int argc, char *argv[]) {
