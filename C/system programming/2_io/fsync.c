@@ -16,6 +16,7 @@
  * Return values and error codes
  * On success, both calls return 0. On failure, both calls
  * return −1 and set errno to one of the following three values:
+ *
  * EBADF
  *   The given file descriptor is not a valid file descriptor open for
  *   writing.
