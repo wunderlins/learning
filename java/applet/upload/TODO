@@ -1,0 +1,7 @@
+
+* implement applet
+	* sign applet
+	* use AWT or swing or no GUI at all (javascript interface) ?
+* poll directory
+* stream data via http to script (PUT or POST method)
+* access local devices and dll to poll fujitsu scanner
