@@ -23,3 +23,5 @@
 *.pyc
 
 
+*.class
+*.jar
