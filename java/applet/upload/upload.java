@@ -4,6 +4,6 @@ import java.awt.*;
 
 public class upload extends Applet {
     public void paint( Graphics g ) {
-        g.drawString("Hello World",50,25);
+        g.drawString("Hello World 2",50,25);
     }
 }
