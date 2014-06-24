@@ -1,4 +1,16 @@
-//public class UploadApplet { //.java
+/**
+ * upload utility
+ * 
+ * goal:
+ *   1 poll directory
+ *   2 read file
+ *   3 upload to server
+ *   4 javascript (livescript?) API
+ * 
+ * Tutorial:
+ * http://www.developer.com/java/other/article.php/3303561/Creating-a-Trusted-Applet-with-Local-File-System-Access-Rights.htm
+ */
+
 import java.io.*;
 import java.awt.*; 
 import java.awt.event.*;
