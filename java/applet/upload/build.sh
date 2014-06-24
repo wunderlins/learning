@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 javac $1.java
-jar cvf $1.jar $1.class
+jar cvf $1.jar $1.class # FileEventClass.java
 
 
 exit 0;
