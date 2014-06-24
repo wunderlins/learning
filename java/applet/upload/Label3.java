@@ -5,7 +5,7 @@ public class Label3 extends Applet {
 	String text = "Hello!";
 	int x = 50;
 	int y = 25;
-	Color bg = new Color(0xCCCCCC);
+	Color bg = new Color(0xFFFFFF);
 	Color fg = new Color(0x000000);
 
 	public String getAppletInfo() {

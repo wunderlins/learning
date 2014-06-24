@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+javac $1.java
+jar cvf $1.jar $1.class
+
+
+exit 0;
+
 if [[ "$1" == "UploadApplet.java" ]]; then
 	javac UploadApplet.java
 	jar cvf UploadApplet.jar UploadApplet.class
