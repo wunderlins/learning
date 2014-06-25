@@ -9,13 +9,18 @@ import java.nio.file.WatchEvent.Kind;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+
 // Simple class to watch directory events.
 class DirectoryWatcher implements Runnable {
 
 	private Path path;
+	private JTextPane fileBox;
 
-	public DirectoryWatcher(Path path) {
+	public DirectoryWatcher(Path path, JTextPane fileBox) {
 		this.path = path;
+		this.fileBox = fileBox;
 	}
 
 	// print the events and the affected file
@@ -24,6 +29,10 @@ class DirectoryWatcher implements Runnable {
 		if (kind.equals(StandardWatchEventKinds.ENTRY_CREATE)) {
 			Path pathCreated = (Path) event.context();
 			System.out.println("Entry created:" + pathCreated);
+			//this.tfFilename.setText("Entry created:" + pathCreated);
+			String buf = this.fileBox.getText();
+			buf.concat("Entry created:" + pathCreated);
+			this.fileBox.setText(buf);
 		} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
 			Path pathDeleted = (Path) event.context();
 			System.out.println("Entry deleted:" + pathDeleted);
