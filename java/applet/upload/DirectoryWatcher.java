@@ -16,9 +16,9 @@ import javax.swing.JTextPane;
 class DirectoryWatcher implements Runnable {
 
 	private Path path;
-	private JTextPane fileBox;
+	private Path observedFile;
 
-	public DirectoryWatcher(Path path, JTextPane fileBox) {
+	public DirectoryWatcher(Path path) {
 		this.path = path;
 		this.fileBox = fileBox;
 	}
@@ -28,17 +28,19 @@ class DirectoryWatcher implements Runnable {
 		Kind<?> kind = event.kind();
 		if (kind.equals(StandardWatchEventKinds.ENTRY_CREATE)) {
 			Path pathCreated = (Path) event.context();
-			System.out.println("Entry created:" + pathCreated);
-			//this.tfFilename.setText("Entry created:" + pathCreated);
-			String buf = this.fileBox.getText();
-			buf.concat("Entry created:" + pathCreated);
-			this.fileBox.setText(buf);
+			System.out.println("Entry created:" + pathCreated + " " + event.count());
+			if(!observedFile)
+				observedFile = pathCreated; 
+			//this.fileBox.setText("Entry created:" + pathCreated);
+			//String buf = this.fileBox.getText();
+			//buf.concat("Entry created:" + pathCreated);
+			//this.fileBox.setText("...----------");
 		} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
 			Path pathDeleted = (Path) event.context();
-			System.out.println("Entry deleted:" + pathDeleted);
+			System.out.println("Entry deleted:" + pathDeleted + " " + event.count());
 		} else if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
 			Path pathModified = (Path) event.context();
-			System.out.println("Entry modified:" + pathModified);
+			System.out.println("Entry modified:" + pathModified + " " + event.count());
 		}
 	}
 

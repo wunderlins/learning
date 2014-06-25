@@ -12,6 +12,7 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.nio.file.WatchEvent.Kind;
 
 public class upload extends JApplet
 implements ActionListener {
@@ -26,15 +27,16 @@ implements ActionListener {
     private String target = "";
     private String method = "";
     private String dir = "";
-    //private DirectoryWatcher d;
-    Path watch;
+    private DirectoryWatcher d;
+    private Path watch;
     
 	public void init() {
 		// read parameter data
-    	file   = getStrParam( "file",   file);
-    	target = getStrParam( "target", target);
-    	method = getStrParam( "method", method); 
-    	dir    = getStrParam( "dir",    dir);
+    	this.file   = getStrParam( "file",   file);
+    	this.target = getStrParam( "target", target);
+    	this.method = getStrParam( "method", method); 
+    	this.dir    = getStrParam( "dir",    dir);
+    	System.out.println("param dir: " + this.dir);
     	
 		try {
 			jbInit();
@@ -42,8 +44,8 @@ implements ActionListener {
 			e.printStackTrace();
 		}
 
-    	Path watch = Paths.get("/home/wus/tmp");
-    	//this.d = new DirectoryWatcher(watch, fileBox);
+    	this.watch = Paths.get(this.dir);
+    	this.d = new DirectoryWatcher(this.watch);
 	}
 
 	// method which will read data from file, and return it in
@@ -72,13 +74,13 @@ implements ActionListener {
 		pane.setBackground(new Color(221, 194, 219));
 
 		fileBox = new JTextPane();
-		fileBox.setText("");
+		fileBox.setText("...");
 		fileBox.setEditable(false);
 		scrolling = new JScrollPane(fileBox);
 		scrolling.setBounds(new Rectangle(16, 65, 295, 225));
 
 		tfFilename = new JTextField();
-		tfFilename.setText(dir);
+		tfFilename.setText(this.dir);
 		tfFilename.setBounds(new Rectangle(16, 23, 206, 29));
 
 		butLoad = new JButton();
@@ -93,18 +95,60 @@ implements ActionListener {
 		
 		setContentPane(pane);
 	}
+	
+	/*
+	// print the events and the affected file
+	private void printEvent(WatchEvent<?> event) {
+		Kind<?> kind = event.kind();
+		if (kind.equals(StandardWatchEventKinds.ENTRY_CREATE)) {
+			Path pathCreated = (Path) event.context();
+			System.out.println("Entry created:" + pathCreated);
+			//this.tfFilename.setText("Entry created:" + pathCreated);
+			//String buf = this.fileBox.getText();
+			//buf.concat("Entry created:" + pathCreated);
+			//this.fileBox.setText(buf);
+		} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
+			Path pathDeleted = (Path) event.context();
+			System.out.println("Entry deleted:" + pathDeleted);
+		} else if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
+			Path pathModified = (Path) event.context();
+			System.out.println("Entry modified:" + pathModified);
+		}
+	}
+	*/
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals(LOAD)) {
 			// fileBox.setText(readFile(tfFilename.getText()));
 			//this.d.run();
 			
+			//System.out.println(this.watch.getFileName());
+			//Path pathToWatch = FileSystems.getDefault().getPath("/home/wus/tmp");
+			DirectoryWatcher dirWatcher = new DirectoryWatcher(this.watch);
+			Thread dirWatcherThread = new Thread(dirWatcher);
+			dirWatcherThread.start();
+
+			// interrupt the program after 10 seconds to stop it.
 			try {
-				WatchService watchService = watch.getFileSystem().newWatchService();
-				watch.register(watchService, StandardWatchEventKinds.ENTRY_CREATE,
+				Thread.sleep(300000); // 5 minutes, 300 seconds
+				dirWatcherThread.start();
+				dirWatcherThread.interrupt();
+			} catch (InterruptedException ex) {
+				System.out.println("interrupted. Goodbye");
+				// TODO: shut down applet, emit live script event or info, maybe reaload or close
+				return;
+			}
+			
+			/*
+			try {
+				System.out.println("Watching : " + this.dir);
+				WatchService watchService = this.watch.getFileSystem().newWatchService();
+				
+				this.watch.register(watchService, StandardWatchEventKinds.ENTRY_CREATE,
 						StandardWatchEventKinds.ENTRY_MODIFY,
 						StandardWatchEventKinds.ENTRY_DELETE);
 	
+				
 				// loop forever to watch directory
 				while (true) {
 					WatchKey watchKey;
@@ -125,15 +169,18 @@ implements ActionListener {
 						break;
 					}
 				}
-
+				
+			
+			
 			} catch (InterruptedException ex) {
 				System.out.println("interrupted. Goodbye");
 				return;
-			} catch (IOException ex) {
+			}  catch (IOException ex) {
 				ex.printStackTrace(); // don't do this in production code. Use a
 				// loggin framework
 				return;
 			}
+			*/
 
 
 		}
