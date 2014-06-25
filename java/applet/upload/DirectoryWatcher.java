@@ -72,7 +72,7 @@ class DirectoryWatcher implements Runnable {
 	}
 }
 
-
+/*
 public class FileEventTest {
 
 	public static void main(String[] args) throws InterruptedException {
@@ -87,3 +87,4 @@ public class FileEventTest {
 
 	}
 }
+*/
