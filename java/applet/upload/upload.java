@@ -42,7 +42,7 @@ implements ActionListener {
 			e.printStackTrace();
 		}
 
-    	Path watch = Paths.get("/tmp");
+    	Path watch = Paths.get("/home/wus/tmp");
     	//this.d = new DirectoryWatcher(watch, fileBox);
 	}
 

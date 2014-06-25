@@ -6,7 +6,7 @@ compile:
 	jar cvf upload.jar upload.class
 	
 sign:
-	jarsigner -storepass ter39gwi "upload.jar" "upload"
+	jarsigner "upload.jar" "upload"
 	
 genkey:
 	
