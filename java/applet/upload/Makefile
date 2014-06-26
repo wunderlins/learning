@@ -4,7 +4,8 @@ all: compile sign test
 compile:
 	javac upload.java
 	javac DirectoryWatcher.java
-	jar cvf upload.jar upload.class DirectoryWatcher.class
+	#javac PostFile.java
+	jar cvf upload.jar upload.class DirectoryWatcher.class #PostFile.class
 	
 sign:
 	jarsigner -storepass $$PASS "upload.jar" "upload"
@@ -16,4 +17,15 @@ test:
 	iceweasel http://localhost/upload.html
 	
 write:
-	 dd bs=1024000 if=/dev/random of=/home/wus/tmp/22
+	rm $$HOME/tmp/25
+	dd bs=1024000 if=/dev/urandom of=$$HOME/tmp/25
+
+keytool:
+	# -keystore "$1" \
+	keytool -genkey -noprompt \
+	 -alias "upload" \
+	 -dname "CN=Simon Wunderlin, OU=Experimentational, O=Hackers Inc Ltd, L=Basel, ST=BS, C=CH" \
+	 -storepass "$$PASS" \
+	 -keypass "$$PASS" \
+	 -validity 365
+

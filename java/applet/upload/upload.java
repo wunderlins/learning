@@ -1,4 +1,7 @@
 //public class UploadApplet { //.java
+
+// http post example: http://stackoverflow.com/questions/2469451/upload-files-with-java
+
 import java.io.*;
 import java.awt.*; 
 import java.awt.event.*;

@@ -1,6 +1,7 @@
 //package com.markusjais;
 
 import java.io.IOException;
+import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
@@ -16,11 +17,11 @@ import javax.swing.JTextPane;
 class DirectoryWatcher implements Runnable {
 
 	private Path path;
-	private Path observedFile;
+	private Path observedFile = null;
 
 	public DirectoryWatcher(Path path) {
 		this.path = path;
-		this.fileBox = fileBox;
+		//this.fileBox = fileBox;
 	}
 
 	// print the events and the affected file
@@ -28,9 +29,10 @@ class DirectoryWatcher implements Runnable {
 		Kind<?> kind = event.kind();
 		if (kind.equals(StandardWatchEventKinds.ENTRY_CREATE)) {
 			Path pathCreated = (Path) event.context();
-			System.out.println("Entry created:" + pathCreated + " " + event.count());
-			if(!observedFile)
-				observedFile = pathCreated; 
+			if(this.observedFile == null) {
+				this.observedFile = pathCreated; 
+				System.out.println("Entry created:" + pathCreated + " " + event.count() + this.observedFile.toString());
+			}
 			//this.fileBox.setText("Entry created:" + pathCreated);
 			//String buf = this.fileBox.getText();
 			//buf.concat("Entry created:" + pathCreated);
@@ -38,14 +40,19 @@ class DirectoryWatcher implements Runnable {
 		} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
 			Path pathDeleted = (Path) event.context();
 			System.out.println("Entry deleted:" + pathDeleted + " " + event.count());
+			
 		} else if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
 			Path pathModified = (Path) event.context();
-			System.out.println("Entry modified:" + pathModified + " " + event.count());
+			File f = new File(pathModified.toString());
+			System.out.println("Entry modified:" + pathModified + " " + event.count() + " " + f.length());
 		}
 	}
 
 	@Override
 	public void run() {
+		long size = 0;
+		int retry = 3; // TODO: check if 3 retries à 200ms is enough
+		
 		try {
 			WatchService watchService = path.getFileSystem().newWatchService();
 			path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE,
@@ -70,6 +77,30 @@ class DirectoryWatcher implements Runnable {
 					watchService.close();
 					break;
 				}
+				
+				if (this.observedFile != null) {
+					while (true) {
+						File f = new File(this.path + "/" + this.observedFile.toString());
+						System.out.println("Observing:" + this.observedFile.toString() + " " + f.length());
+						Thread.currentThread().sleep(200);
+						
+						if (f.length() > 0) {
+							if (size != f.length()) {
+								size = f.length();
+								retry = 3;
+							} else {
+								retry--;
+								if (retry == 0)
+									break;
+							}
+						}
+						
+						//System.out.println("End of loop");
+					}
+					
+					break;
+					
+				}
 			}
 
 		} catch (InterruptedException ex) {
@@ -80,6 +111,10 @@ class DirectoryWatcher implements Runnable {
 			// loggin framework
 			return;
 		}
+		
+		// TODO: if we got this far, our file is ready for uploading.
+		System.out.println("Done writing, " + this.observedFile.toString() + ", bytes: " + size);
+		
 	}
 }
 
