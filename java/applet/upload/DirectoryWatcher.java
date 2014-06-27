@@ -113,8 +113,10 @@ class DirectoryWatcher implements Runnable {
 		}
 		
 		// TODO: if we got this far, our file is ready for uploading.
-		System.out.println("Done writing, " + this.observedFile.toString() + ", bytes: " + size);
-		
+		upload.UploadFile = this.observedFile.toString();
+		System.out.println("Done writing, " + upload.UploadFile + ", bytes: " + size);
+		Thread.currentThread().interrupt();
+		return;
 	}
 }
 

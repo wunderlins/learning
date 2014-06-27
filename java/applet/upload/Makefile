@@ -17,8 +17,8 @@ test:
 	iceweasel http://localhost/upload.html
 	
 write:
-	rm $$HOME/tmp/25
-	dd bs=1024000 if=/dev/urandom of=$$HOME/tmp/25
+	rm $$HOME/tmp/25.pdf || true
+	dd bs=1024000 if=/dev/urandom of=$$HOME/tmp/25.pdf
 
 keytool:
 	# -keystore "$1" \
