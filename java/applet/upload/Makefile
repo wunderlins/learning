@@ -4,8 +4,9 @@ all: compile sign test
 compile:
 	javac upload.java
 	javac DirectoryWatcher.java
-	#javac PostFile.java
-	jar cvf upload.jar upload.class DirectoryWatcher.class #PostFile.class
+	javac PostFile.java
+	jar cvf upload.jar upload.class DirectoryWatcher.class PostFile.class \
+		httpcomponents-client-4.3.4/lib/*.jar
 	
 sign:
 	jarsigner -storepass $$PASS "upload.jar" "upload"

@@ -127,6 +127,13 @@ implements ActionListener {
 			
 			System.out.println("File to upload: " + UploadFile.toString());
 		}
+		
+		try {
+			PostFile conn = new PostFile();
+			conn.main("http://localhost/post.php", this.dir + "/" + UploadFile.toString());
+		} catch (Exception ex) {
+			System.out.println("Failed uploading, " + ex.toString());
+		}
 	}
 	
 	private String getStrParam( String name, String defaultVal ) {

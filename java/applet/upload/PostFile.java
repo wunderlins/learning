@@ -13,18 +13,17 @@ import org.apache.http.util.EntityUtils;
 
 
 public class PostFile {
-  public static void main(String[] args) throws Exception {
+  public static void main(String TargetUrl, String SourceFile) throws Exception {
     HttpClient httpclient = new DefaultHttpClient();
     httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 
-    HttpPost httppost = new HttpPost("http://localhost/post.php");
-    File file = new File("C:\\Users\\joao\\Pictures\\bla.jpg");
+    HttpPost httppost = new HttpPost(TargetUrl /*"http://localhost/post.php" */);
+    File file = new File(SourceFile /*"/home/wus/.profile"*/);
 
     MultipartEntity mpEntity = new MultipartEntity();
-    ContentBody cbFile = new FileBody(file, "image/jpeg");
+    ContentBody cbFile = new FileBody(file, "image/jpeg"); // TODO: find appropriate content-type
     mpEntity.addPart("userfile", cbFile);
-
-
+    
     httppost.setEntity(mpEntity);
     System.out.println("executing request " + httppost.getRequestLine());
     HttpResponse response = httpclient.execute(httppost);
