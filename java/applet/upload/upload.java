@@ -131,8 +131,10 @@ implements ActionListener {
 		try {
 			PostFile conn = new PostFile();
 			conn.main("http://localhost/post.php", this.dir + "/" + UploadFile.toString());
+			// TODO: check response status, must make sure the whole file was accepted
 		} catch (Exception ex) {
 			System.out.println("Failed uploading, " + ex.toString());
+			ex.printStackTrace();
 		}
 	}
 	
