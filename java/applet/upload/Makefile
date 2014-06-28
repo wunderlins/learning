@@ -2,7 +2,7 @@
 all: compile sign package test
 
 compile:
-	javac upload.java
+	javac -classpath .:plugin.jar:./httpcomponents-client-4.3.4/lib/:classes upload.java 
 	javac DirectoryWatcher.java
 	javac PostFile.java
 

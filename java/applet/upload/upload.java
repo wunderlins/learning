@@ -17,6 +17,9 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.nio.file.WatchEvent.Kind;
 
+import netscape.javascript.*;
+//import netscape.javascript.JSObject;
+
 public class upload extends JApplet
 implements ActionListener {
 	private JPanel pane = null;
@@ -42,6 +45,8 @@ implements ActionListener {
     	this.method = getStrParam( "method", method); 
     	this.dir    = getStrParam( "dir",    dir);
     	System.out.println("param dir: " + this.dir);
+    	
+    	JSObject window = JSObject.getWindow(this);
     	
 		try {
 			jbInit();
@@ -102,6 +107,7 @@ implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
+		
 		if (e.getActionCommand().equals(LOAD)) {
 			System.out.println("Starting thread ...");
 			// fileBox.setText(readFile(tfFilename.getText()));
