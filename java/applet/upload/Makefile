@@ -1,15 +1,16 @@
-
-all: compile sign package test
+.PHONY: test
+all: compile package sign test
 
 compile:
-	javac -classpath .:plugin.jar:./httpcomponents-client-4.3.4/lib/:classes upload.java 
+	javac -classpath .:plugin.jar:classes upload.java 
+	#javac upload.java 
 	javac DirectoryWatcher.java
-	javac PostFile.java
+	javac -classpath .:plugin.jar:classes PostFile.java
 
 package:
 	#mv _org org || true
 	jar cvf upload.jar upload.class DirectoryWatcher.class PostFile.class \
-		httpcomponents-client-4.3.4/lib/*.jar
+		httpcomponents-client-4.3.4/lib/*.jar plugin.jar
 	
 sign:
 	jarsigner -storepass $$PASS "upload.jar" "upload"

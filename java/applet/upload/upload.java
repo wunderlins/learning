@@ -29,16 +29,51 @@ implements ActionListener {
 	private JButton butLoad = null;
 	private final String LOAD = "load";
 	
-	public static String UploadFile = "";
-
 	private String file = "";
-	private String target = "";
 	private String method = "";
-	private String dir = "";
 	private DirectoryWatcher d;
 	private Path watch;
+	
+	private JSObject window;
+	
+	public static long fileSize;
+	public String dir = "";
+	public String target = "";
+	public static String UploadFile = "";
+	public int status = 0;
+	public String[6] statusName = new String[20];
+
     
 	public void init() {
+		
+		this.statusName[0] = "Unknown";
+		this.statusName[1] = "Initializing";
+		this.statusName[2] = "Polling";
+		this.statusName[3] = "Found File";
+		this.statusName[4] = "Uploading";
+		this.statusName[5] = "Finished";
+		
+    	this.window = JSObject.getWindow(this);
+    	
+		this.status = 1;
+		this.window.eval("appletStatusChange()");
+		/**
+		 * the following parameters should be user configurable:
+		 *   dir: the directory to poll
+		 *   fieldname: form field name used in post
+		 *   target: http url of server-side script
+		 *   userparam: name=value|name1=value pairs which the user might 
+		 *              want to pass along with the uploaded file, things like 
+		 *              authentication tokens, session id's etc.
+		 * 
+		 * The following attributes shall be available to javascript:
+		 *   int status: 0: init, 1: polling, 2: found file, 3: found file, 4: uploading, 5: finished
+		 *   int serverResponseCode: http response code
+		 *   int fileSize (bytes)
+		 *   String: mimeType
+		 *   int progress (0-100), only updated during upload.
+		 */
+		
 		// read parameter data
     	this.file   = getStrParam( "file",   file);
     	this.target = getStrParam( "target", target);
@@ -46,16 +81,71 @@ implements ActionListener {
     	this.dir    = getStrParam( "dir",    dir);
     	System.out.println("param dir: " + this.dir);
     	
-    	JSObject window = JSObject.getWindow(this);
-    	
+    	/*
 		try {
 			jbInit();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-
+		*/
+		pane = new JPanel();
+		setContentPane(pane);
+		
+		
     	this.watch = Paths.get(this.dir);
     	this.d = new DirectoryWatcher(this.watch);
+		this.status = 2;
+		this.window.eval("appletStatusChange()");
+		this.window.eval("appletInit()");
+    	
+		System.out.println("Starting thread ...");
+		// fileBox.setText(readFile(tfFilename.getText()));
+		//this.d.run();
+		
+		//System.out.println(this.watch.getFileName());
+		//Path pathToWatch = FileSystems.getDefault().getPath("/home/wus/tmp");
+		DirectoryWatcher dirWatcher = new DirectoryWatcher(this.watch);
+		Thread dirWatcherThread = new Thread(dirWatcher);
+		dirWatcherThread.start();
+
+		// interrupt the program after 10 seconds to stop it.
+		try {
+			//Thread.sleep(300000); // 5 minutes, 300 seconds
+			//dirWatcherThread.start();
+			dirWatcherThread.join();
+			dirWatcherThread.interrupt();
+			this.status = 3;
+			this.window.eval("appletStatusChange()");
+		} catch (InterruptedException ex) {
+			System.out.println("interrupted. Goodbye");
+			// TODO: shut down applet, emit live script event or info, maybe reaload or close
+			//return;
+		}
+		
+		System.out.println("File to upload: " + UploadFile.toString());
+		this.window.eval("appletGotFile()");
+		
+		try {
+			PostFile conn = new PostFile();
+			this.status = 4;
+			this.window.eval("appletStatusChange()");
+			conn.main(this.target /*"http://localhost/post.php" */, this.dir + "/" + UploadFile.toString());
+			// TODO: check response status, must make sure the whole file was accepted
+			
+			this.status = 5;
+			this.window.eval("appletStatusChange()");
+			this.window.eval("appletFinished()");
+			/*
+			if (num.intValue() != 5) {
+				throw new RuntimeException(); // test failed
+			} */
+			
+		} catch (Exception ex) {
+			System.out.println("Failed uploading, " + ex.toString());
+			ex.printStackTrace();
+			this.window.eval("appletFailed()");
+		}
+    	
 	}
 
 	// method which will read data from file, and return it in
@@ -136,8 +226,15 @@ implements ActionListener {
 		
 		try {
 			PostFile conn = new PostFile();
-			conn.main("http://localhost/post.php", this.dir + "/" + UploadFile.toString());
+			conn.main(this.target /*"http://localhost/post.php" */, this.dir + "/" + UploadFile.toString());
 			// TODO: check response status, must make sure the whole file was accepted
+			
+			this.window.eval("applietFinished()");
+			/*
+			if (num.intValue() != 5) {
+				throw new RuntimeException(); // test failed
+			} */
+			
 		} catch (Exception ex) {
 			System.out.println("Failed uploading, " + ex.toString());
 			ex.printStackTrace();

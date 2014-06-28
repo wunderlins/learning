@@ -4,23 +4,143 @@
 	<meta charset="utf-8">	
 	<title>upload</title>
 	<!--[if lt IE 9]><script src="html5shiv-printshiv.js" media="all"></script><![endif]-->
+
+	<script type="text/javascript">
+		statusName = ["Unknown", "Initializing", "Polling", 
+		              "Found File", "Uploading", "Finished"];
+		
+		function byid(id) {
+			return document.getElementById(id);
+		}
+		
+		function appletStatusChange() {
+			byid("status").innerHTML = upload.status + " " + statusName[upload.status];
+		}
+		
+		function appletInit() {
+			// alert("applietInit");
+			byid("dir").innerHTML = upload.dir;
+			byid("target").innerHTML = upload.target;
+		}
+		
+		function appletGotFile() {
+			byid("file").innerHTML = upload.UploadFile;
+		}
+		
+		function appletFinished() {
+			byid("size").innerHTML = upload.fileSize;
+		}
+		
+		function appletFailed() {
+			alert("applietFailed");
+		}
+	</script>
+	
+	<style type="text/css">
+	body {font-family: sans;}
+	
+	.label {
+		display: block; 
+		float: left;
+		width: 80px;
+		text-transform: capitalize;
+	}
+	
+	.label::after {
+		content: ": ";
+	}
+	
+	.value {
+		
+	}
+	</style>
 </head>
 <body>
+	
+	<h1>File upload JavaApplet</h1>
+	
+	<h2>Synopsis</h2>
+	<p>This applet polls a local directory <em>dir</em> for newly created files. The first 
+	   new created file is uploaded to <em>target</em>.</p>
+	
+	<p>the id parameter is important to be set if you want to communicate from JavaScript 
+	   with the applet. This applet includes the following live connect functionality:</p>
+	<h3>Public Variables</h3>
+	<ul>
+		<li>fileSize: bytes, becomes available once a new file becomes available in the poll directory and before upload starts.</li>
+		<li>dir: the same as the dir applet attribute</li>
+		<li>target: the same as the target  applet attribute</li>
+		<li>UploadFile: file name of the file to be uploaded. becomes available once a new file in the poll directory is created</li>
+		<li>status: status code
+			<ol>
+				<li value="0">init</li>
+				<li>polling</li>
+				<li>found file</li>
+				<li>found file</li>
+				<li>uploading</li>
+				<li>finished</li>
+			</ol>
+		</li>
+	</ul>
+	<h3>JavaScript event handlers</h3>
+	<p>The faollowing methods (if available) are called by the applet when an event happens:</p>
+	<ul>
+		<li>appletStatusChange(): whenever the status variable changes, this one is emmited.</li>
+		<li>appletInit(): after successfull initialisation of the applet (just before starting to poll the directory)</li>
+		<li>appletGotFile(): new file found in poll directory, it seems to be written completely. After this event, the fileZize variable is updated and now greater than 0</li>
+		<li>appletFinished(): successfully finished uploading</li>
+		<li>appletFailed(): something went wrong, no further info available. Use the java console for debugging.</li>
+	</ul>
+	
+	<h2>Example</h2>
+<pre><code>	&lt;applet id="upload"
+	        code="upload.class" 
+	        archive="upload.jar"
+	        target="http://localhost/post.php" 
+	        width="0" 
+	        height="0"
+	        dir="/home/wus/tmp"&gt;
+	&lt;/applet&gt;</code></pre>
+	
 	<!-- This is a VERY bare bones version of a HTML5 template! -->
 	<applet id="upload"
 	        code="upload.class" 
-	        archive="upload.jar" 
-	        width="500" 
-	        height="300"
+	        archive="upload.jar"
+	        target="http://localhost/post.php" 
+	        width="0" 
+	        height="0"
 	        dir="/home/wus/tmp">
 	</applet>
 	
-	<script type="text/javascript">
+	<h2>Status Information</h2>
+	<div>
+		<div>
+			<span class="label">Status</span>
+			<span class="value" id="status"></span>
+		</div>
 	
+		<div>
+			<span class="label">dir</span>
+			<span class="value" id="dir"></span>
+		</div>
 	
+		<div>
+			<span class="label">target</span>
+			<span class="value" id="target"></span>
+		</div>
 	
-	</script>
+		<div>
+			<span class="label">file</span>
+			<span class="value" id="file">-</span>
+		</div>
 	
+		<div>
+			<span class="label">size</span>
+			<span class="value" id="size">-</span>
+		</div>
+	
+	</div>
+	<br/><br/>
 </body>
 </html>
 
