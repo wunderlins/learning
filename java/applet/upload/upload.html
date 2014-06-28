@@ -70,22 +70,22 @@
 <pre><code>	&lt;applet id="upload"
 	        code="upload.class" 
 	        archive="upload.jar"
-	        target="http://localhost/post.php" 
-	        name="scan"
 	        width="0" 
-	        height="0"
-	        dir="/home/wus/tmp"&gt;
+	        height="0"&gt;
+		&lt;param name="dir" value="\Users\wus" /&gt;
+		&lt;param name="name" value="scan" /&gt;
+		&lt;param name="target" value="http://10.0.0.29/post.php" /&gt;
 	&lt;/applet&gt;</code></pre>
 	
 	<!-- This is a VERY bare bones version of a HTML5 template! -->
 	<applet id="upload"
 	        code="upload.class" 
 	        archive="upload.jar"
-	        target="http://localhost/post.php" 
 	        width="0" 
-	        height="0"
-	        name="scan"
-	        dir="/home/wus/tmp">
+	        height="0">
+		<param name="dir" value="/home/wus/tmp" />
+		<param name="name" value="scan" />
+		<param name="target" value="http://10.0.0.29/post.php" />
 	</applet>
 	
 	<h2>Status Information</h2>

@@ -1,5 +1,5 @@
 .PHONY: test
-all: compile package sign test
+all: compile package sign
 
 compile:
 	javac -classpath .:plugin.jar:classes upload.java 
@@ -11,6 +11,8 @@ package:
 	#mv _org org || true
 	jar cvf upload.jar upload.class DirectoryWatcher.class PostFile.class \
 		httpcomponents-client-4.3.4/lib/*.jar plugin.jar
+	#	-C netscape/* sun/* org/* #httpcomponents-client-4.3.4/lib/*.jar plugin.jar
+	jar ufm upload.jar addToManifest.txt
 	
 sign:
 	jarsigner -storepass $$PASS "upload.jar" "upload"
@@ -25,9 +27,9 @@ sign:
 genkey:
 	
 test:
-	mv org _org || true
+	#mv org _org || true
 	killall iceweasel || true
-	iceweasel http://localhost/upload.html
+	iceweasel http://10.0.0.29/upload.html
 	
 	
 write:

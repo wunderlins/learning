@@ -29,7 +29,6 @@ implements ActionListener {
 	private JButton butLoad = null;
 	private final String LOAD = "load";
 	
-	private String file = "";
 	private String method = "";
 	private String formFieldName = "uploadedFile";
 	private DirectoryWatcher d;
@@ -78,7 +77,6 @@ implements ActionListener {
 		 */
 		
 		// read parameter data
-    	this.file   = getStrParam( "file",   file);
     	this.target = getStrParam( "target", target);
     	this.method = getStrParam( "method", method); 
     	this.dir    = getStrParam( "dir",    dir);
@@ -92,9 +90,9 @@ implements ActionListener {
 			e.printStackTrace();
 		}
 		*/
+    	
 		pane = new JPanel();
 		setContentPane(pane);
-		
 		
     	this.watch = Paths.get(this.dir);
     	this.d = new DirectoryWatcher(this.watch);
@@ -251,8 +249,11 @@ implements ActionListener {
 	
 	private String getStrParam( String name, String defaultVal ) {
 		String param = this.getParameter(name);
-		if (param != null)
+		if (param != null) {
+			System.out.println("Parameter " + name + " Found: " + param);
 			return param;
+		}
+		System.out.println("Parameter " + name + " not Found, using default value " + defaultVal);
 		return defaultVal;
 	}
 }
