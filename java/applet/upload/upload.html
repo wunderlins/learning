@@ -59,39 +59,6 @@
 	
 	<h1>File upload JavaApplet</h1>
 	
-	<h2>Synopsis</h2>
-	<p>This applet polls a local directory <em>dir</em> for newly created files. The first 
-	   new created file is uploaded to <em>target</em>.</p>
-	
-	<p>the id parameter is important to be set if you want to communicate from JavaScript 
-	   with the applet. This applet includes the following live connect functionality:</p>
-	<h3>Public Variables</h3>
-	<ul>
-		<li>fileSize: bytes, becomes available once a new file becomes available in the poll directory and before upload starts.</li>
-		<li>dir: the same as the dir applet attribute</li>
-		<li>target: the same as the target  applet attribute</li>
-		<li>UploadFile: file name of the file to be uploaded. becomes available once a new file in the poll directory is created</li>
-		<li>status: status code
-			<ol>
-				<li value="0">init</li>
-				<li>polling</li>
-				<li>found file</li>
-				<li>found file</li>
-				<li>uploading</li>
-				<li>finished</li>
-			</ol>
-		</li>
-	</ul>
-	<h3>JavaScript event handlers</h3>
-	<p>The faollowing methods (if available) are called by the applet when an event happens:</p>
-	<ul>
-		<li>appletStatusChange(): whenever the status variable changes, this one is emmited.</li>
-		<li>appletInit(): after successfull initialisation of the applet (just before starting to poll the directory)</li>
-		<li>appletGotFile(): new file found in poll directory, it seems to be written completely. After this event, the fileZize variable is updated and now greater than 0</li>
-		<li>appletFinished(): successfully finished uploading</li>
-		<li>appletFailed(): something went wrong, no further info available. Use the java console for debugging.</li>
-	</ul>
-	
 	<h2>Example</h2>
 <pre><code>	&lt;applet id="upload"
 	        code="upload.class" 
@@ -141,6 +108,40 @@
 	
 	</div>
 	<br/><br/>
+	
+	<h2>Synopsis</h2>
+	<p>This applet polls a local directory <em>dir</em> for newly created files. The first 
+	   new created file is uploaded to <em>target</em>.</p>
+	
+	<p>the id parameter is important to be set if you want to communicate from JavaScript 
+	   with the applet. This applet includes the following live connect functionality:</p>
+	<h3>Public Variables</h3>
+	<ul>
+		<li>fileSize: bytes, becomes available once a new file becomes available in the poll directory and before upload starts.</li>
+		<li>dir: the same as the dir applet attribute</li>
+		<li>target: the same as the target  applet attribute</li>
+		<li>UploadFile: file name of the file to be uploaded. becomes available once a new file in the poll directory is created</li>
+		<li>status: status code
+			<ol>
+				<li value="0">init</li>
+				<li>polling</li>
+				<li>found file</li>
+				<li>found file</li>
+				<li>uploading</li>
+				<li>finished</li>
+			</ol>
+		</li>
+	</ul>
+	<h3>JavaScript event handlers</h3>
+	<p>The faollowing methods (if available) are called by the applet when an event happens:</p>
+	<ul>
+		<li>appletStatusChange(): whenever the status variable changes, this one is emmited.</li>
+		<li>appletInit(): after successfull initialisation of the applet (just before starting to poll the directory)</li>
+		<li>appletGotFile(): new file found in poll directory, it seems to be written completely. After this event, the fileZize variable is updated and now greater than 0</li>
+		<li>appletFinished(): successfully finished uploading</li>
+		<li>appletFailed(): something went wrong, no further info available. Use the java console for debugging.</li>
+	</ul>
+	
 </body>
 </html>
 
