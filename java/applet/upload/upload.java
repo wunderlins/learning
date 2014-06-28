@@ -31,6 +31,7 @@ implements ActionListener {
 	
 	private String file = "";
 	private String method = "";
+	private String formFieldName = "uploadedFile";
 	private DirectoryWatcher d;
 	private Path watch;
 	
@@ -41,7 +42,9 @@ implements ActionListener {
 	public String target = "";
 	public static String UploadFile = "";
 	public int status = 0;
-	public String[6] statusName = new String[20];
+	public String[] statusName = new String[20];
+	public static int statusCode = 0;
+	public static String mimeType = "";
 
     
 	public void init() {
@@ -79,6 +82,7 @@ implements ActionListener {
     	this.target = getStrParam( "target", target);
     	this.method = getStrParam( "method", method); 
     	this.dir    = getStrParam( "dir",    dir);
+    	this.formFieldName = getStrParam("name", formFieldName);
     	System.out.println("param dir: " + this.dir);
     	
     	/*
@@ -129,7 +133,9 @@ implements ActionListener {
 			PostFile conn = new PostFile();
 			this.status = 4;
 			this.window.eval("appletStatusChange()");
-			conn.main(this.target /*"http://localhost/post.php" */, this.dir + "/" + UploadFile.toString());
+			conn.main(this.target, 
+					  this.dir + "/" + UploadFile.toString(), 
+					  this.formFieldName);
 			// TODO: check response status, must make sure the whole file was accepted
 			
 			this.status = 5;
@@ -147,7 +153,8 @@ implements ActionListener {
 		}
     	
 	}
-
+	
+	/*
 	// method which will read data from file, and return it in
 	// String
 	public String readFile(String fn) {
@@ -164,6 +171,7 @@ implements ActionListener {
 		}
 		return ret;
 	}
+	*/
 
 	private void jbInit() throws Exception {
 		pane = new JPanel();
@@ -226,7 +234,7 @@ implements ActionListener {
 		
 		try {
 			PostFile conn = new PostFile();
-			conn.main(this.target /*"http://localhost/post.php" */, this.dir + "/" + UploadFile.toString());
+			conn.main(this.target, this.dir + "/" + UploadFile.toString(), this.formFieldName);
 			// TODO: check response status, must make sure the whole file was accepted
 			
 			this.window.eval("applietFinished()");

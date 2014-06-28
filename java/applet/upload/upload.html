@@ -34,6 +34,8 @@
 		
 		function appletFinished() {
 			byid("size").innerHTML = upload.fileSize;
+			byid("statusCode").innerHTML = upload.statusCode;
+			byid("mimeType").innerHTML = upload.mimeType;
 		}
 		
 		function appletFailed() {
@@ -47,7 +49,7 @@
 	.label {
 		display: block; 
 		float: left;
-		width: 80px;
+		width: 110px;
 		text-transform: capitalize;
 	}
 	
@@ -69,6 +71,7 @@
 	        code="upload.class" 
 	        archive="upload.jar"
 	        target="http://localhost/post.php" 
+	        name="scan"
 	        width="0" 
 	        height="0"
 	        dir="/home/wus/tmp"&gt;
@@ -81,6 +84,7 @@
 	        target="http://localhost/post.php" 
 	        width="0" 
 	        height="0"
+	        name="scan"
 	        dir="/home/wus/tmp">
 	</applet>
 	
@@ -88,17 +92,17 @@
 	<div>
 		<div>
 			<span class="label">Status</span>
-			<span class="value" id="status"></span>
+			<span class="value" id="status">-</span>
 		</div>
 	
 		<div>
 			<span class="label">dir</span>
-			<span class="value" id="dir"></span>
+			<span class="value" id="dir">-</span>
 		</div>
 	
 		<div>
 			<span class="label">target</span>
-			<span class="value" id="target"></span>
+			<span class="value" id="target">-</span>
 		</div>
 	
 		<div>
@@ -109,6 +113,16 @@
 		<div>
 			<span class="label">size</span>
 			<span class="value" id="size">-</span>
+		</div>
+	
+		<div>
+			<span class="label">mimeType</span>
+			<span class="value" id="mimeType">-</span>
+		</div>
+	
+		<div>
+			<span class="label">StatusCode</span>
+			<span class="value" id="statusCode">-</span>
 		</div>
 	
 	</div>
@@ -126,6 +140,8 @@
 		<li>dir: the same as the dir applet attribute</li>
 		<li>target: the same as the target  applet attribute</li>
 		<li>UploadFile: file name of the file to be uploaded. becomes available once a new file in the poll directory is created</li>
+		<li>statusCode: http response status, initially 0</li>
+		<li>mimeType: string represenation of the file's mime-type. is available after successfull upload.</li>
 		<li>status: status code
 			<ol>
 				<li value="0">init</li>
@@ -146,7 +162,10 @@
 		<li>appletFinished(): successfully finished uploading</li>
 		<li>appletFailed(): something went wrong, no further info available. Use the java console for debugging.</li>
 	</ul>
-	
+	<h3>Post values</h3>
+	<p>The uploaded file will be posted with the post field name setd in the applets name parameter. If unset, it wil ldefault to "uploadedFile" (how creative! i know.)</p>
+	<p>By default, 2 other fields are submitted: "size" (bytes) and  "content-type" which should show a string represenation of the file's Mime-type.</p>
+	 
 </body>
 </html>
 

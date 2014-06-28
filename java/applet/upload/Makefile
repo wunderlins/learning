@@ -43,3 +43,5 @@ keytool:
 	 -keypass "$$PASS" \
 	 -validity 365
 
+clean:
+	rm *.class || true
