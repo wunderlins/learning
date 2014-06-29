@@ -1,3 +1,4 @@
 Permissions: all-permissions
-Codebase: http://10.0.0.29
 Application-Name: Scanner Upload
+
+

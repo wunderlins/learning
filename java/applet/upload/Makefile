@@ -10,7 +10,8 @@ compile:
 package:
 	#mv _org org || true
 	jar cvf upload.jar upload.class DirectoryWatcher.class PostFile.class \
-		httpcomponents-client-4.3.4/lib/*.jar plugin.jar org/*
+		org/*
+		#httpcomponents-client-4.3.4/lib/*.jar plugin.jar org/*
 	#	-C netscape/* sun/* org/* #httpcomponents-client-4.3.4/lib/*.jar plugin.jar
 	jar ufm upload.jar addToManifest.txt
 	
