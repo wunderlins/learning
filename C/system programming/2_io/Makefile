@@ -1,4 +1,4 @@
-.PHONY: 
+.PHONY: diff clean 
 
 CC_OPTS=-Wall
 GCC=/usr/bin/gcc
@@ -33,3 +33,6 @@ creat:
 
 clean:
 	rm $(BINDIR)* || true
+
+diff:
+	git diff | colordiff | less -R
