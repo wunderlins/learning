@@ -22,7 +22,7 @@
 #include <errno.h>
 
 #define TIMEOUT 5
-#define BUF_LEN 1024
+#define BUF_LEN 32
 
 struct timeval tv;
 fd_set readfds;
@@ -41,7 +41,8 @@ int check() {
 	tv.tv_usec = 0;
 
 	/* All right, now block! */
-	ret = select (STDIN_FILENO + 1, &readfds,	NULL, NULL, &tv);
+	//ret = select (STDIN_FILENO + 1, &readfds,	NULL, NULL, &tv);
+	ret = select (STDIN_FILENO + 1, &readfds,	NULL, NULL, NULL);
 	if (ret == -1) {
 		perror ("select");
 		if (ret == EBADF)
@@ -77,7 +78,7 @@ int check() {
 
 		if (len) {
 			buf[len] = '\0';
-			printf ("read: %s\n", buf);
+			printf ("read[%d]: %s\n", len, buf);
 
 			if (buf[0] == 'q' && buf[1] == '\n')
 				return 2;
@@ -136,6 +137,7 @@ int main (void) {
 	}
 	*/
 
+	int count = 0;
 	printf("Insert some text (quit with q\n");
 	while (1) {
 		ret = check();
@@ -148,6 +150,7 @@ int main (void) {
 			printf("Error, aborting.\n");
 			return ret;
 		}
+		printf("next iteration in while %d\n", count++);
 	}
 
 	return 0;
