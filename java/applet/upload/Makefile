@@ -44,7 +44,7 @@ keytool:
 	 -dname "CN=Simon Wunderlin, OU=Experimentational, O=Hackers Inc Ltd, L=Basel, ST=BS, C=CH" \
 	 -storepass "$$PASS" \
 	 -keypass "$$PASS" \
-	 -validity 365
+	 -validity 3650
 
 clean:
 	rm *.class || true
