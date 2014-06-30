@@ -48,9 +48,11 @@ int check() {
 		if (ret == EBADF)
 			printf("An invalid file descriptor was provided in one of the sets.\n");
 		if (ret == EINTR)
-			printf("A signal was caught while waiting, and the call can be reissued.\n");
+			printf("A signal was caught while waiting, and the call can "
+		         "be reissued.\n");
 		if (ret == EINVAL)
-			printf("The parameter n is negative, or the given timeout is invalid.\n");
+			printf("The parameter n is negative, or the given timeout is "
+		         "invalid.\n");
 		if (ret == ENOMEM)
 			printf("Insufficient memory was available to complete the request.\n");
 		return 1;
