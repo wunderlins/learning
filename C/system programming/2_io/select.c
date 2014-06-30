@@ -95,48 +95,6 @@ int check() {
 int main (void) {
 	int ret;
 
-	/* All right, now block! * /
-	ret = select (STDIN_FILENO + 1, &readfds,	NULL, NULL, &tv);
-	if (ret == -1) {
-		perror ("select");
-		if (ret == EBADF)
-			printf("An invalid file descriptor was provided in one of the sets.\n");
-		if (ret == EINTR)
-			printf("A signal was caught while waiting, and the call can be reissued.\n");
-		if (ret == EINVAL)
-			printf("The parameter n is negative, or the given timeout is invalid.\n");
-		if (ret == ENOMEM)
-			printf("Insufficient memory was available to complete the request.\n");
-		return 1;
-	} else if (!ret) {
-		printf ("%d seconds elapsed.\n", TIMEOUT);
-		return 0;
-	}
-
-	/ *
-	 * Is our file descriptor ready to read?
-	 * (It must be, as it was the only fd that
-	 * we provided and the call returned
-	 * nonzero, but we will humor ourselves.)
-	if (FD_ISSET(STDIN_FILENO, &readfds)) {
-		char buf[BUF_LEN+1];
-		int len;
-
-		/ * guaranteed to not block * /
-		len = read (STDIN_FILENO, buf, BUF_LEN);
-		if (len == -1) {
-			perror ("read");
-			return 1;
-		}
-
-		if (len) {
-			buf[len] = '\0';
-			printf ("read: %s\n", buf);
-		}
-		return 0;
-	}
-	*/
-
 	int count = 0;
 	printf("Insert some text (quit with q\n");
 	while (1) {
