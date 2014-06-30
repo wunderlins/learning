@@ -1,0 +1,53 @@
+JAVA DIRECTORY POLLER
+
+This is a java applet which polls a directory for new files. The first new 
+File detected will be uploaded via http to a cgi script (as multipart-mime).
+
+The applet requires elevated privileges on the client computer and must 
+therefore be signed (or the java security must be reduced, not recomended.
+This will probably not work in future versions of java).
+
+Building
+--------
+
+The build system used is gnu make. 
+
+For signing, building and creating a keystore a password is required. This 
+must be set as environment variable PASS (eg. bash$ export PASS=secret). If the 
+env variable is missing, the signing process will fail. If you cannot use 
+environment variables, you might edit the Makefile and replace '$$PASS' with 
+your password.  
+
+1) You first need to create a keystore if you don't have one
+   $ export PASS=secret; make keytool
+
+2) building the applet is as simple as
+   $ make
+   if everything works, you will get a self-signed
+   upload.jar i nthe current directory
+
+Deploying
+---------
+
+add an applet tag to your site. The applet provides LiveConnect capabilities.
+This means that you can acces properties of the java class 'upload' fom 
+within your page via JavaScript. It also means that the Java applet will
+emit certain events which you can catch easily by just defining a couple 
+of javascript functions. If these functions are present, they will be called 
+from within the applet.
+
+This is an example tag (snippet):
+	<applet id="upload"
+	        code="upload.class" 
+	        archive="upload.jar"
+	        width="0" 
+	        height="0">
+		<param name="dir" value="/tmp" />
+		<param name="name" value="scan" />
+		<param name="target" value="http://localhost/post.php" />
+	</applet>
+
+post.php should be part of this distribution and shows what can be expected to
+be posted by the applet.
+
+For detailed instructions and examples please refer to upload.html.
