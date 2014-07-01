@@ -47,9 +47,11 @@ int check() {
 		perror ("select");
 		if (ret == EBADF)
 			printf("An invalid file descriptor was provided in one of the sets.\n");
-		if (ret == EINTR)
+		if (ret == EINTR) {
 			printf("A signal was caught while waiting, and the call can "
 		         "be reissued.\n");
+			return 0;
+		}
 		if (ret == EINVAL)
 			printf("The parameter n is negative, or the given timeout is "
 		         "invalid.\n");
