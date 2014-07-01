@@ -101,7 +101,9 @@
 
 /* poll timeout, in seconds */
 int main(void) {
-	struct pollfd fds[2];
+
+	const int numfds = 2;
+	struct pollfd fds[numfds];
 	int ret;
 
 	/* watch stdin for input */
@@ -114,7 +116,7 @@ int main(void) {
 	fds[1].events = POLLOUT;
 
 	/* All set, block! */
-	ret = poll(fds, 2, TIMEOUT * 1000);
+	ret = poll(fds, numfds, TIMEOUT * 1000);
 	if (ret == -1) {
 		perror("poll");
 		return 1;
