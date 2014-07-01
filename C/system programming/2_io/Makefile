@@ -4,8 +4,11 @@ CC_OPTS=-Wall
 GCC=/usr/bin/gcc
 BINDIR=../bin/
 
-all: clean read open creat write fsync seek truncate select
+all: clean read open creat write fsync seek truncate select poll
 
+poll:
+	$(GCC) $(CC_OPTS) -o $(BINDIR)poll poll.c
+	
 select:
 	$(GCC) $(CC_OPTS) -o $(BINDIR)select select.c
 	
