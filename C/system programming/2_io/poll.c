@@ -29,6 +29,7 @@
  * Multiple structures may be passed, instructing poll() to watch multiple
  * file descriptors. The events field of each structure is a bitmask of
  * events to watch for on that file descriptor. The user sets this field.
+ *
  * The revents field is a bitmask of events that were witnessed on the
  * file descriptor. The kernel sets this field on return. All of the
  * events requested in the events field may be returned in the revents
@@ -109,7 +110,7 @@ int main(void) {
 
 	/* watch stdout for ability to write (almost always true) */
 	fds[1].fd = STDOUT_FILENO;
-	fds[1].events = POLLOUT;
+	fds[1].events = POLLIN;
 
 	/* All set, block! */
 	ret = poll(fds, 2, TIMEOUT * 1000);
