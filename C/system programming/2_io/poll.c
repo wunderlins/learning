@@ -110,7 +110,8 @@ int main(void) {
 
 	/* watch stdout for ability to write (almost always true) */
 	fds[1].fd = STDOUT_FILENO;
-	fds[1].events = POLLIN;
+	// set this to soemthing else than POLLOUT to see it block
+	fds[1].events = POLLOUT;
 
 	/* All set, block! */
 	ret = poll(fds, 2, TIMEOUT * 1000);
