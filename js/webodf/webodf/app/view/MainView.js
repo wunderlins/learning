@@ -35,7 +35,7 @@ Ext.define('webodf.view.MainView', {
                     split: true,
                     border: '0 2 0 0',
                     itemId: 'menuPanel',
-                    width: 150,
+                    width: 159,
                     bodyBorder: false,
                     collapseDirection: 'left',
                     collapsible: true,

@@ -14,8 +14,8 @@
                 "width": null
             }
         },
-        "urlPrefix": "",
-        "exportPath": "",
+        "urlPrefix": "http://localhost/learning.git/js/webodf/webodf/",
+        "exportPath": "/home/wus/Repos/learning.git/js/cooked",
         "spacesToIndent": 4,
         "sdkPath": "",
         "lineEnding": "LF",
@@ -23,7 +23,8 @@
         "cacheBust": false,
         "buildShouldOverwriteIndex": true,
         "generateArchitectVersion": true,
-        "displayfield-ExtBox1-1529-inputEl": "Not Installed"
+        "displayfield-ExtBox1-1529-inputEl": "Not Installed",
+        "displayfield-ExtBox1-1635-inputEl": "Not Installed"
     },
     "xdsVersion": "3.0.4",
     "xdsBuild": 1386,
