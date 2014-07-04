@@ -14,5 +14,30 @@
             "MainView"
         ]
     },
-    "designerId": "application"
+    "designerId": "application",
+    "cn": [
+        {
+            "type": "fixedfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "launch",
+                "implHandler": [
+                    "//alert(\"launch\");",
+                    "",
+                    "function init() {",
+                    "\tvar odfelement = document.getElementById(\"contentEditor-innerCt\"),",
+                    "\t\todfcanvas = new odf.OdfCanvas(odfelement);",
+                    "\todfcanvas.load(\"template.odt\");",
+                    "}",
+                    "",
+                    "init();"
+                ]
+            },
+            "designerId": "ce47787d-18d9-4d70-bc5b-ab2bf4c7b26a"
+        }
+    ]
 }

@@ -30,6 +30,15 @@ Ext.application({
 
 	launch: function() {
 		Ext.create('webodf.view.MainView');
+		//alert("launch");
+
+		function init() {
+			var odfelement = document.getElementById("contentEditor-innerCt"),
+				odfcanvas = new odf.OdfCanvas(odfelement);
+			odfcanvas.load("template.odt");
+		}
+
+		init();
 	}
 
 });
