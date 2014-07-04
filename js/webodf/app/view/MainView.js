@@ -14,65 +14,66 @@
  */
 
 Ext.define('webodf.view.MainView', {
-    extend: 'Ext.container.Viewport',
+	extend: 'Ext.container.Viewport',
 
-    requires: [
-        'Ext.menu.Menu',
-        'Ext.menu.Item'
-    ],
+	requires: [
+		'Ext.menu.Menu',
+		'Ext.menu.Item'
+	],
 
-    itemId: 'mainView',
-    layout: 'border',
+	itemId: 'mainView',
+	layout: 'border',
 
-    initComponent: function() {
-        var me = this;
+	initComponent: function() {
+		var me = this;
 
-        Ext.applyIf(me, {
-            items: [
-                {
-                    xtype: 'panel',
-                    region: 'west',
-                    split: true,
-                    border: '0 2 0 0',
-                    itemId: 'menuPanel',
-                    width: 159,
-                    bodyBorder: false,
-                    collapseDirection: 'left',
-                    collapsible: true,
-                    title: 'Menu',
-                    items: [
-                        {
-                            xtype: 'menu',
-                            floating: false,
-                            itemId: 'sideMenu',
-                            items: [
-                                {
-                                    xtype: 'menuitem',
-                                    text: 'Menu Item'
-                                },
-                                {
-                                    xtype: 'menuitem',
-                                    text: 'Menu Item'
-                                },
-                                {
-                                    xtype: 'menuitem',
-                                    text: 'Menu Item'
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    xtype: 'panel',
-                    region: 'center',
-                    split: true,
-                    itemId: 'contentPanel',
-                    title: 'Content'
-                }
-            ]
-        });
+		Ext.applyIf(me, {
+			items: [
+				{
+					xtype: 'panel',
+					region: 'west',
+					split: true,
+					border: '0 2 0 0',
+					itemId: 'menuPanel',
+					width: 159,
+					bodyBorder: false,
+					collapseDirection: 'left',
+					collapsible: true,
+					title: 'Menu',
+					items: [
+						{
+							xtype: 'menu',
+							floating: false,
+							itemId: 'sideMenu',
+							items: [
+								{
+									xtype: 'menuitem',
+									text: 'Menu Item'
+								},
+								{
+									xtype: 'menuitem',
+									text: 'Menu Item'
+								},
+								{
+									xtype: 'menuitem',
+									text: 'Menu Item'
+								}
+							]
+						}
+					]
+				},
+				{
+					xtype: 'panel',
+					region: 'center',
+					split: true,
+					id: 'contentEditor',
+					itemId: 'contentPanel',
+					title: 'Content'
+				}
+			]
+		});
 
-        me.callParent(arguments);
-    }
+		me.callParent(arguments);
+	}
 
 });

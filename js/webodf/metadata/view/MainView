@@ -95,6 +95,7 @@
             },
             "codeClass": null,
             "userConfig": {
+                "id": "contentEditor",
                 "itemId": "contentPanel",
                 "layout|region": "center",
                 "layout|split": true,

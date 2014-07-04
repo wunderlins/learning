@@ -1,0 +1,12 @@
+{
+    "type": "Ext.app.Controller",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userClassName": "webodf"
+    },
+    "designerId": "82c407fc-3b9a-46a1-a34c-7570e082f575"
+}
