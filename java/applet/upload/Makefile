@@ -30,7 +30,7 @@ genkey:
 test:
 	#mv org _org || true
 	killall iceweasel || true
-	iceweasel http://10.0.0.29/upload.html
+	iceweasel http://localhost/upload.html
 	
 	
 write:
