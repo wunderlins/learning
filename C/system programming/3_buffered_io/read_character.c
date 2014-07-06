@@ -7,6 +7,7 @@ int main(int argc, char *argv[]) {
 	
 	if (c == EOF)
 		/* error */
+		;
 	else
 		printf ("c=%c\n", (char) c);
 
