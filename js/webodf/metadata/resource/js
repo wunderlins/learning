@@ -1,0 +1,13 @@
+{
+    "type": "jsresource",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userClassName": "js",
+        "url": "webodf.js-0.5.0/webodf.js"
+    },
+    "designerId": "1bd6f8b7-41c9-4005-8f09-27eebf6dceb5"
+}
