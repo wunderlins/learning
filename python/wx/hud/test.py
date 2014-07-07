@@ -18,7 +18,7 @@ class View(wx.Panel):
 		dc = wx.AutoBufferedPaintDC(self)
 		dc.Clear()
 		#dc.DrawLine(0, 0, w, h)
-		dc.SetPen(wx.Pen('black', 5, wx.SOLID))
+		dc.SetPen(wx.Pen('black', 1, wx.SOLID))
 		
 		#sky
 		dc.SetBrush(wx.Brush('#004fc5'))
