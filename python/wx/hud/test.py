@@ -2,6 +2,8 @@
 
 import wx
 
+#wx = wx
+
 class View(wx.Panel):
 	def __init__(self, parent):
 		super(View, self).__init__(parent)
@@ -27,6 +29,8 @@ class View(wx.Panel):
 		#ground
 		dc.SetBrush(wx.Brush('#539e47'))
 		r2 = dc.DrawRectangle(0, h/2, w, h/2)
+		
+		#img = wx.Image("background.png", wx.BITMAP_TYPE_ANY)
 		
 		#dc.Rotate(50);
 		
