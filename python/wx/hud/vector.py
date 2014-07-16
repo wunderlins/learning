@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import wx
+import math
 
 class View(wx.Panel):
     def __init__(self, parent):
@@ -16,15 +17,16 @@ class View(wx.Panel):
         self.roll = 0
         self.pitch = 0
         
-        self.diag_deg = 0
+        self.c = calc()
+        self.diag_deg = 0.0
     
     def on_size(self, event):
         w, h = self.GetClientSize()
         self.w = w
         self.h = h
-        print "on_size: w %d, h %d" % (self.w, self.h)
         
-        self.diag_deg()
+        self.diag_deg = self.c.angle_deg(w, h) 
+        print "on_size: w %d, h %d, d %f" % (self.w, self.h, self.diag_deg)
         
         event.Skip()
         self.Refresh()
@@ -32,9 +34,6 @@ class View(wx.Panel):
     def on_paint(self, event):
         self.hud_paint()
     
-    def diag_deg(self):
-        self.diag_deg = 0
-        
     def attitude(self, roll, pitch):
         """
         roll, degrees. 
@@ -51,12 +50,28 @@ class View(wx.Panel):
         """
         
         # roll implementation
+
+        # calculate hud ground and sky polygons
+        # check if horizon crosses side or bottom/top window side
+        if (roll > self.diag_deg or roll < self.diag_deg*-1):
+            print "bottom/top"
+        else:
+            # w2 = w/2
+            # t = tan(roll)
+            # t = opp/w2
+            # w2 * t = opp
+            # 
+            y = (float(self.w)/2.0) * math.tan(math.radians(float(roll)))
+            print "side, w: %f" % y
+            
+            # generate two points for an example line
+            p1 = (0, self.h/2.0 + y)
+            p2 = (self.w/2.0, self.h/2.0)
+
         
-        return True;
+        return (p1, p2);
     
     def hud_paint(self):
-        self.attitude(0, 0)
-        
         dc = wx.AutoBufferedPaintDC(self)
         dc.Clear()
         #dc.DrawLine(0, 0, w, h)
@@ -69,6 +84,11 @@ class View(wx.Panel):
         #ground
         dc.SetBrush(wx.Brush('#539e47'))
         r2 = dc.DrawRectangle(0, self.h/2, self.w, self.h/2)
+        
+        att = self.attitude(30, 0)
+        print att
+        dc.DrawLine(att[0][0], att[0][1], att[1][0], att[1][1])
+        
         
         #img = wx.Image("background.png", wx.BITMAP_TYPE_ANY)
         
@@ -85,7 +105,11 @@ class Frame(wx.Frame):
         self.Center()
         self.view = View(self)
 
-
+class calc():
+    def angle_deg(self, adjacent, opposite):
+        """ calculate the angle of a right triangle from oppsite and adjacent """
+        #print "%f %f, at %f, factor %f" % (adjacent, opposite, math.atan(float(opposite)/float(adjacent)), (opposite/adjacent))
+        return math.degrees(math.atan(float(opposite)/float(adjacent)));
 
 def main():
     app = wx.App(False)
