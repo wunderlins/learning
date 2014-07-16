@@ -55,6 +55,8 @@ class View(wx.Panel):
         # check if horizon crosses side or bottom/top window side
         if (roll > self.diag_deg or roll < self.diag_deg*-1):
             print "bottom/top"
+            return (0, 0)
+        
         else:
             # w2 = w/2
             # t = tan(roll)
@@ -65,11 +67,11 @@ class View(wx.Panel):
             print "side, w: %f" % y
             
             # generate two points for an example line
-            p1 = (0, self.h/2.0 + y)
-            p2 = (self.w/2.0, self.h/2.0)
+            h2 = self.h/2.0
+            p1 = (0, h2 + y)
+            p2 = (self.w/2.0, h2)
 
-        
-        return (p1, p2);
+            return (p1, p2);
     
     def hud_paint(self):
         dc = wx.AutoBufferedPaintDC(self)
