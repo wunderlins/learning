@@ -50,12 +50,19 @@ class View(wx.Panel):
         """
         
         # roll implementation
+        h2 = self.h/2.0
+        w2 = self.w/2.0
+        p2 = (self.w/2.0, h2)
 
         # calculate hud ground and sky polygons
         # check if horizon crosses side or bottom/top window side
-        if (roll > self.diag_deg or roll < self.diag_deg*-1):
-            print "bottom/top"
-            return (0, 0)
+        if (roll > self.diag_deg):
+            alpha = 90-roll
+            x = (float(h2)) * math.tan(math.radians(float(alpha)))
+            
+            print "bottom/top, w: %f, a: %f" % (x, alpha)
+            p1 = (w2-x, self.h)
+            return (p1, p2);
         
         else:
             # w2 = w/2
@@ -63,14 +70,11 @@ class View(wx.Panel):
             # t = opp/w2
             # w2 * t = opp
             # 
-            y = (float(self.w)/2.0) * math.tan(math.radians(float(roll)))
-            print "side, w: %f" % y
+            y = (float(w2)) * math.tan(math.radians(float(roll)))
+            print "side, h: %f" % y
             
             # generate two points for an example line
-            h2 = self.h/2.0
             p1 = (0, h2 + y)
-            p2 = (self.w/2.0, h2)
-
             return (p1, p2);
     
     def hud_paint(self):
