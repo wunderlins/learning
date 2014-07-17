@@ -9,6 +9,7 @@ class View(wx.Panel):
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_PAINT, self.on_paint)
+        self.Bind(wx.EVT_TIMER, self.OnTimer)
         
         w, h = self.GetClientSize()
         self.w = w
@@ -19,7 +20,32 @@ class View(wx.Panel):
         
         self.c = calc()
         self.diag_deg = 0.0
+        
+        self.sim = 0
+        self.direction = 1
+        self.jump = 1
+        
+        # start timer, trigger every 40ms / 25hz
+        self.refresh = 40 # millis
+        self.timer = wx.Timer(self)
+        self.timer.Start(self.refresh)
     
+    def OnTimer(self, event):
+        if (self.sim <= 0):
+            self.direction = 1
+        if (self.sim >= 90):
+            self.direction = -1
+        
+        self.sim += (self.jump * self.direction)
+        
+        print "angle: %d" % self.sim
+        #img = self.image.Rotate(self.counter, self.img_center)
+        #img.Resize((self.img_height, self.img_width), wx.Point(50,50), r=-1, g=-1, b=-1)
+        #self.bitmap = img.ConvertToBitmap()
+        #self.dc.Clear()
+        #self.dc.DrawBitmap(self.bitmap, 100, 100)
+        self.hud_paint()
+        
     def on_size(self, event):
         w, h = self.GetClientSize()
         self.w = w
@@ -91,7 +117,7 @@ class View(wx.Panel):
         dc.SetBrush(wx.Brush('#539e47'))
         r2 = dc.DrawRectangle(0, self.h/2, self.w, self.h/2)
         
-        att = self.attitude(30, 0)
+        att = self.attitude(self.sim, 0)
         print att
         dc.DrawLine(att[0][0], att[0][1], att[1][0], att[1][1])
         
@@ -106,7 +132,7 @@ class View(wx.Panel):
 class Frame(wx.Frame):
     def __init__(self):
         super(Frame, self).__init__(None)
-        self.SetTitle('My Title')
+        self.SetTitle('HUD')
         self.SetClientSize((500, 500))
         self.Center()
         self.view = View(self)
