@@ -83,17 +83,17 @@ class View(wx.Panel):
         delta = 0;
         
         if (roll >= 0 and roll < 90):
-        	self.sector = 1 # top left
-        	delta = roll
+            self.sector = 1 # top left
+            delta = roll
         if (roll < 0 and roll >= -90):
-        	self.sector = 2 # bottom left
-        	delta = abs(roll)
+            self.sector = 2 # bottom left
+            delta = abs(roll)
         if (roll < -90 and roll >= -180):
-        	self.sector = 3 # bottom right
-        	delta = abs(roll) - 90
+            self.sector = 3 # bottom right
+            delta = abs(roll) - 90
         if (roll >= 90 and roll <= 180):
-        	self.sector = 4 # top right
-        	delta = roll - 90
+            self.sector = 4 # top right
+            delta = roll - 90
         
         # roll implementation
         h2 = self.h/2.0
@@ -122,14 +122,14 @@ class View(wx.Panel):
         
         p = (0, 0)
         if (self.sector == 1):
-        	p = (w2-x, h2-y)
+            p = (w2-x, h2-y)
         if (self.sector == 2):
-        	p = (w2-x, y+h2)
+            p = (w2-x, y+h2)
         if (self.sector == 3):
-        	p = (w2+y, x+h2)
+            p = (w2+y, x+h2)
         if (self.sector == 4):
-        	p = (w2+y, h2-x)
-    		
+            p = (w2+y, h2-x)
+            
         print "Angle: %d/%d, sector %d, %d/%d" % (roll, delta, self.sector, p[0], p[1])
         return (p, p2);
         
@@ -153,14 +153,14 @@ class View(wx.Panel):
         ox = 0
         oy = 0
         if (att[0][0] == 0):
-        	ox = self.w
+            ox = self.w
         else:
-        	ox = self.w - att[0][0]
+            ox = self.w - att[0][0]
 
         if (att[0][1] == 0):
-        	oy = self.h
+            oy = self.h
         else:
-        	oy = self.h - att[0][1]
+            oy = self.h - att[0][1]
         
         opposite = (ox, oy)	
         
@@ -168,20 +168,20 @@ class View(wx.Panel):
         p4 = (0, 0)
         
         if (att[0][0] == 0):
-        	p3 = (0, self.h)
-        	p4 = (self.w, self.h)
+            p3 = (0, self.h)
+            p4 = (self.w, self.h)
         
         if (att[0][0] == self.w):
-        	p3 = (self.w, 0)
-        	p4 = (0, 0)
+            p3 = (self.w, 0)
+            p4 = (0, 0)
         
         if (att[0][1] == 0):
-        	p3 = (0, 0)
-        	p4 = (0, self.h)
+            p3 = (0, 0)
+            p4 = (0, self.h)
         
         if (att[0][1] == self.h):
-        	p3 = (self.w, self.h)
-        	p4 = (self.w, 0)
+            p3 = (self.w, self.h)
+            p4 = (self.w, 0)
         
         #print att
         dc.DrawLine(att[0][0], att[0][1], ox, oy)
