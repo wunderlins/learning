@@ -56,6 +56,8 @@ class View(wx.Panel):
         self.diag_deg = self.c.angle_deg(w, h) 
         print "on_size: w %d, h %d, d %f" % (self.w, self.h, self.diag_deg)
         
+        self.hud_paint()
+        
         event.Skip()
         self.Refresh()
     
@@ -139,16 +141,60 @@ class View(wx.Panel):
         
         #sky
         dc.SetBrush(wx.Brush('#004fc5'))
-        dc.DrawRectangle(0, 0, self.w, self.h/2)
+        dc.DrawRectangle(0, 0, self.w, self.h)
         
         #ground
-        dc.SetBrush(wx.Brush('#539e47'))
-        r2 = dc.DrawRectangle(0, self.h/2, self.w, self.h/2)
+        #dc.SetBrush(wx.Brush('#539e47'))
+        #r2 = dc.DrawRectangle(0, self.h/2, self.w, self.h/2)
         
         att = self.attitude(self.sim, 0)
-        #print att
-        dc.DrawLine(att[0][0], att[0][1], att[1][0], att[1][1])
+        print "att: %d %d" % (att[0][0], att[0][1])
         
+        ox = 0
+        oy = 0
+        if (att[0][0] == 0):
+        	ox = self.w
+        else:
+        	ox = self.w - att[0][0]
+
+        if (att[0][1] == 0):
+        	oy = self.h
+        else:
+        	oy = self.h - att[0][1]
+        
+        opposite = (ox, oy)	
+        
+        p3 = (0, 0)
+        p4 = (0, 0)
+        
+        if (att[0][0] == 0):
+        	p3 = (0, self.h)
+        	p4 = (self.w, self.h)
+        
+        if (att[0][0] == self.w):
+        	p3 = (self.w, 0)
+        	p4 = (0, 0)
+        
+        if (att[0][1] == 0):
+        	p3 = (0, 0)
+        	p4 = (0, self.h)
+        
+        if (att[0][1] == self.h):
+        	p3 = (self.w, self.h)
+        	p4 = (self.w, 0)
+        
+        #print att
+        dc.DrawLine(att[0][0], att[0][1], ox, oy)
+        
+        points = [
+        	opposite,
+        	att[0],
+        	p3,
+        	p4
+        ]
+        
+        dc.SetBrush(wx.Brush('#539e47'))
+        dc.DrawPolygon(points)
         
         #img = wx.Image("background.png", wx.BITMAP_TYPE_ANY)
         
