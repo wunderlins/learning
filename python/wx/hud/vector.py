@@ -31,14 +31,16 @@ class View(wx.Panel):
         self.timer.Start(self.refresh)
     
     def OnTimer(self, event):
-        if (self.sim <= 0):
-            self.direction = 1
-        if (self.sim >= 90):
-            self.direction = -1
+        #if (self.sim <= -180):
+        #    self.direction = 1
+        #if (self.sim >= 180):
+        #    self.direction = -1
         
+        if (self.sim >= 180):
+        	self.sim = -180
         self.sim += (self.jump * self.direction)
         
-        print "angle: %d" % self.sim
+        #print "angle: %d" % self.sim
         #img = self.image.Rotate(self.counter, self.img_center)
         #img.Resize((self.img_height, self.img_width), wx.Point(50,50), r=-1, g=-1, b=-1)
         #self.bitmap = img.ConvertToBitmap()
@@ -75,20 +77,35 @@ class View(wx.Panel):
             90-180   = up inverted
         """
         
+        self.sector = 0
+        delta = 0;
+        
+        if (roll >= 0 and roll < 90):
+        	self.sector = 1 # top left
+        	delta = roll
+        if (roll < 0 and roll >= -90):
+        	self.sector = 2 # bottom left
+        	delta = abs(roll)
+        if (roll < -90 and roll >= -180):
+        	self.sector = 3 # bottom right
+        	delta = abs(roll) - 90
+        if (roll >= 90 and roll <= 180):
+        	self.sector = 4 # top right
+        	delta = roll - 90
+        
         # roll implementation
         h2 = self.h/2.0
         w2 = self.w/2.0
-        p2 = (self.w/2.0, h2)
+        p2 = (w2, h2)
+        x = w2
+        y = h2
 
         # calculate hud ground and sky polygons
         # check if horizon crosses side or bottom/top window side
-        if (roll > self.diag_deg):
-            alpha = 90-roll
-            x = (float(h2)) * math.tan(math.radians(float(alpha)))
-            
-            print "bottom/top, w: %f, a: %f" % (x, alpha)
-            p1 = (w2-x, self.h)
-            return (p1, p2);
+        if (delta > self.diag_deg):
+            x = (float(h2)) * math.tan(math.radians(float(90-delta)))
+            #print "bottom/top, w: %f, a: %f" % (x, delta)
+            #p1 = (w2-x, self.h)
         
         else:
             # w2 = w/2
@@ -96,13 +113,24 @@ class View(wx.Panel):
             # t = opp/w2
             # w2 * t = opp
             # 
-            y = (float(w2)) * math.tan(math.radians(float(roll)))
-            print "side, h: %f" % y
-            
+            y = (float(w2)) * math.tan(math.radians(float(delta)))
+            #print "side, h: %f" % y
             # generate two points for an example line
-            p1 = (0, h2 + y)
-            return (p1, p2);
-    
+            #p1 = (0, h2 + y)
+        
+        p = (0, 0)
+        if (self.sector == 1):
+        	p = (w2-x, h2-y)
+        if (self.sector == 2):
+        	p = (w2-x, y+h2)
+        if (self.sector == 3):
+        	p = (w2+y, x+h2)
+        if (self.sector == 4):
+        	p = (w2+y, h2-x)
+    		
+        print "Angle: %d/%d, sector %d, %d/%d" % (roll, delta, self.sector, p[0], p[1])
+        return (p, p2);
+        
     def hud_paint(self):
         dc = wx.AutoBufferedPaintDC(self)
         dc.Clear()
@@ -118,7 +146,7 @@ class View(wx.Panel):
         r2 = dc.DrawRectangle(0, self.h/2, self.w, self.h/2)
         
         att = self.attitude(self.sim, 0)
-        print att
+        #print att
         dc.DrawLine(att[0][0], att[0][1], att[1][0], att[1][1])
         
         
