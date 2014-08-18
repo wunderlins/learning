@@ -37,7 +37,7 @@ class View(wx.Panel):
         #    self.direction = -1
         
         if (self.sim >= 180):
-        	self.sim = -180
+            self.sim = -180
         self.sim += (self.jump * self.direction)
         
         #print "angle: %d" % self.sim
@@ -146,6 +146,10 @@ class View(wx.Panel):
         #ground
         #dc.SetBrush(wx.Brush('#539e47'))
         #r2 = dc.DrawRectangle(0, self.h/2, self.w, self.h/2)
+        
+        w, h = self.GetClientSize()
+        self.w = w
+        self.h = h
         
         att = self.attitude(self.sim, 0)
         print "att: %d %d" % (att[0][0], att[0][1])
