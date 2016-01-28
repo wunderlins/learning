@@ -17,4 +17,13 @@ db = ZODB.DB('data/mydata.fs') # file database
 connection = db.open()
 root = connection.root
 
+# create a btree list of accounts
+import BTrees.OOBTree
+from account import Account
 
+root.accounts = BTrees.OOBTree.BTree()
+root.accounts['account-1'] = Account()
+
+# make changes persistent
+import transaction
+transaction.commit()
