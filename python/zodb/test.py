@@ -6,6 +6,7 @@
 
 # open the zope database
 import ZODB, ZODB.FileStorage, ZODB.config, BTrees.OOBTree, transaction
+from account import Account
 import pprint
 
 """
@@ -19,21 +20,24 @@ connection = db.open()
 """
 
 # using a config file to open the database
-db = ZODB.config.databaseFromURL('config.xml')
+db = ZODB.config.databaseFromURL('etc/config.xml')
 connection = db.open()
 
 # get the root node
 root = connection.root
 
 # create a btree list of accounts
-from account import Account
+try:
+	root.accounts
+except:
+	root.accounts = BTrees.OOBTree.BTree()
+	root.accounts['account-1'] = Account()
 
-root.accounts = BTrees.OOBTree.BTree()
-root.accounts['account-4'] = Account()
+root.accounts['account-2'].deposit(1)
 
 # make changes persistent
 transaction.commit()
 
 # show root
 for n in root.accounts:
-	pprint.pprint(root.accounts[n])
+	print "%s, %f" % (n, root.accounts[n].balance)
