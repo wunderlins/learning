@@ -11,8 +11,8 @@ import ZODB, ZODB.FileStorage
 #db = ZODB.DB(storage)
 
 # Storage shortcuts
-# db = ZODB.DB('mydata.fs') # file database
-db = ZODB.DB(None) # memmory database
+db = ZODB.DB('data/mydata.fs') # file database
+#db = ZODB.DB(None) # memmory database
 
 connection = db.open()
 root = connection.root
