@@ -5,7 +5,8 @@
 # pip install --user zodbpickle # install into home of user
 
 # open the zope database
-import ZODB, ZODB.FileStorage
+import ZODB, ZODB.FileStorage, ZODB.config, BTrees.OOBTree, transaction
+import pprint
 
 """
 #storage = ZODB.FileStorage.FileStorage('mydata.fs')
@@ -18,7 +19,6 @@ connection = db.open()
 """
 
 # using a config file to open the database
-import ZODB.config
 db = ZODB.config.databaseFromURL('config.xml')
 connection = db.open()
 
@@ -26,17 +26,14 @@ connection = db.open()
 root = connection.root
 
 # create a btree list of accounts
-import BTrees.OOBTree
 from account import Account
 
 root.accounts = BTrees.OOBTree.BTree()
 root.accounts['account-4'] = Account()
 
 # make changes persistent
-import transaction
 transaction.commit()
 
 # show root
-import pprint
 for n in root.accounts:
 	pprint.pprint(root.accounts[n])

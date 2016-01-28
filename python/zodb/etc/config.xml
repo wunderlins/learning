@@ -1,0 +1,5 @@
+<zodb>
+  <filestorage>
+  path data/mydata.fs
+  </filestorage>
+</zodb>
