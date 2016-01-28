@@ -22,8 +22,13 @@ import BTrees.OOBTree
 from account import Account
 
 root.accounts = BTrees.OOBTree.BTree()
-root.accounts['account-1'] = Account()
+root.accounts['account-3'] = Account()
 
 # make changes persistent
 import transaction
 transaction.commit()
+
+# show root
+import pprint
+for n in root.accounts:
+	pprint.pprint(root.accounts[n])
