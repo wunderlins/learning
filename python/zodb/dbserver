@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+basedir=`dirname $0`
+
+PYTHONPATH="$basedir/lib/:$PATH" \
+python "$basedir/lib/ZEO/runzeo.py" \
+	-a "$basedir/var/zeosocket" \
+	-f "127.0.0.1:8091" \
+	--pid-file "$basedir/var/zeo.pid"
+
+#	-f "$basedir/data/mydata.fs" \ # unix socket ?
+
