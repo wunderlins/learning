@@ -33,7 +33,7 @@ except:
 	root.accounts = BTrees.OOBTree.BTree()
 	root.accounts['account-1'] = Account()
 
-root.accounts['account-2'].deposit(1)
+root.accounts['account-1'].deposit(1)
 
 # make changes persistent
 transaction.commit()
