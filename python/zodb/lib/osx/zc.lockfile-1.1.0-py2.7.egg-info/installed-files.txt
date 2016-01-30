@@ -3,7 +3,7 @@
 ../zc/lockfile/README.txt
 ../zc/lockfile/__init__.pyc
 ../zc/lockfile/tests.pyc
-./
+.
 dependency_links.txt
 namespace_packages.txt
 not-zip-safe
