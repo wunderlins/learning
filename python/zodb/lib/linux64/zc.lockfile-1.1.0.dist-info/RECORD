@@ -1,0 +1,14 @@
+zc.lockfile-1.1.0-nspkg.pth,sha256=F02DLLRQyfFnx3pqA_fGNJ2ZluQx5ij0RVJfrWw6A2Q,295
+zc/lockfile/README.txt,sha256=aJhOQslEXUtGBv8NEG-SPi7JFnFes8HgGdycbJBQcrQ,1205
+zc/lockfile/__init__.py,sha256=hzMr2obyc3G3qYWPEaumHAVmqsnmbpxHA6mV3OqZFo8,2991
+zc/lockfile/tests.py,sha256=NoSuCAjXFWx6uJqs-7UN7HbS9DeLIo1eYSzkzLN_t_g,2931
+zc.lockfile-1.1.0.dist-info/DESCRIPTION.rst,sha256=Fm6XCZgU_CEfS0sYVKQFHLCMRNlmm-dq7islYVJVn80,2731
+zc.lockfile-1.1.0.dist-info/METADATA,sha256=lhTe5QFV8u8NasZgfXwZPcj5RbRhcVFVBBZfUw7MCSM,3872
+zc.lockfile-1.1.0.dist-info/RECORD,,
+zc.lockfile-1.1.0.dist-info/WHEEL,sha256=1MCSHS6HDHLQ4wIeJBIjjA5GPDLnYZX2HFlkttwBvUE,93
+zc.lockfile-1.1.0.dist-info/metadata.json,sha256=vGuBqf_cPmLcxoA3iGOg68zuiddxg-2er8rwg7_KyTM,1283
+zc.lockfile-1.1.0.dist-info/namespace_packages.txt,sha256=nptwHX5ivUBBZ49av8trjckjjvj_7OZ_f0bSLnluz1k,3
+zc.lockfile-1.1.0.dist-info/top_level.txt,sha256=nptwHX5ivUBBZ49av8trjckjjvj_7OZ_f0bSLnluz1k,3
+/tmp/tmpQNuy_n/lib/python/zc.lockfile-1.1.0.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+zc/lockfile/__init__.pyc,,
+zc/lockfile/tests.pyc,,
