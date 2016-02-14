@@ -10,6 +10,14 @@ Copyright, 2015, simon Wunderlin
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="lib/bower_components/bootstrap-css/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+	<style>
+		.sortorder:after {
+			content: '\25b2';
+		}
+		.sortorder.reverse:after {
+			content: '\25bc';
+		}
+	</style>
 </head>
 <body>
 	<div data-ng-view></div>

@@ -31,7 +31,7 @@ SimpleApp.factory("appFactory", function() {
 	var factory = {};
 	var items = [
 		{name: "Simone", location: "Basel"},
-		{name: "Simon", location: "Lupsingen"},
+		{name: "Andreas", location: "Lupsingen"},
 		{name: "Sämi", location: "Basel"}
 	];
 	
@@ -42,8 +42,9 @@ SimpleApp.factory("appFactory", function() {
 	return factory;
 });
 
-SimpleApp.controller("appController", function ($scope, $location, appFactory) {
+SimpleApp.controller("appController", function ($scope, $location, $filter, appFactory) {
 	$scope.items = appFactory.getItems();
+	$scope.reverse = false;
 	
 	$scope.addItem = function() {
 		$scope.items.push({
@@ -54,4 +55,15 @@ SimpleApp.controller("appController", function ($scope, $location, appFactory) {
 		$scope.newItem.location = "";
 		$location.path('/');
 	};
+	
+	var orderBy = $filter('orderBy');
+	//$scope.reverse = true;
+	$scope.order = function(predicate) {
+		//alert(predicate)
+		$scope.predicate = predicate;
+		$scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+		$scope.items = orderBy($scope.items, predicate, $scope.reverse);
+	};
+	//console.log($scope)
+	//$scope.order('name', true);
 });
