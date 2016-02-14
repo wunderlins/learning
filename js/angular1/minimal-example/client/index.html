@@ -13,19 +13,28 @@ Copyright, 2015, simon Wunderlin
   </head>
   <body>
     <div data-ng-controller="appController" class="container-fluid">
-      
+
       <form class="form-inline">
-	<div class="form-group">
-	  <label for="searchName">Name</label>
-	  <input type="text" id="searchName" data-ng-model="searchName" class="form-control" placeholder="Search">
-	</div>
+				<div class="form-group">
+					<input type="text" id="searchName" data-ng-model="searchName" class="form-control" placeholder="Search">
+				</div>
       </form>
 
       <ul>
-	<li data-ng-repeat="item in items | orderBy: 'name' | filter: searchName">{{item.name}} / {{item.location}}</li>
+				<li data-ng-repeat="item in items| orderBy: 'name' | filter: searchName">{{item.name}} / {{item.location}}</li>
       </ul>
+		
+			<form>
+				<label>New</label>
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Name" data-ng-model="newItem.name">
+				</div>
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Location" data-ng-model="newItem.location">
+				</div>
+				<button class="btn btn-primary" data-ng-click="addItem()">Add Item</button>
     </div>
-    
+
     <script src="lib/bower_components/angular/angular.js"></script>
     <script src="lib/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script src="simpleapp.js"></script>
