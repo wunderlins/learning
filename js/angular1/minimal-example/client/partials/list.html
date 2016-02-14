@@ -6,9 +6,18 @@
 		</div>
 	</form>
 
-	<ul>
-		<li data-ng-repeat="item in items| orderBy: 'name' | filter: searchName">{{item.name}} / {{item.location}}</li>
-	</ul>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Location</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-ng-repeat="item in items| orderBy: 'name' | filter: searchName">
+				<td>{{item.name}}</td><td>{{item.location}}</td></tr>
+		</tbody>
+	</table>
 
 	<a class="btn btn-primary" href="#/add">Add Item</a>
 </div>

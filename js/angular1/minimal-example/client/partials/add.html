@@ -1,7 +1,6 @@
 <div data-ng-controller="appController" class="container-fluid">
 	<h1>Add new Item</h1>
 	<form>
-		<label>New</label>
 		<div class="form-group">
 			<input type="text" class="form-control" placeholder="Name" data-ng-model="newItem.name">
 		</div>
@@ -9,6 +8,6 @@
 			<input type="text" class="form-control" placeholder="Location" data-ng-model="newItem.location">
 		</div>
 		<button class="btn btn-primary" data-ng-click="addItem()">Add Item</button>
-		<a href="#/" class="btn">Cancel</a>
+		<a href="#/" class="btn btn-default">Cancel</a>
 	</form>
 </div>
