@@ -1,6 +1,8 @@
 {
   "name": "backend",
   "dependencies": {
+    "colors": "^1.1.2",
+    "express": "^4.13.4",
     "node-json-db": "^0.5.2"
   }
 }
