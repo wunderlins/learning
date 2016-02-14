@@ -16,28 +16,37 @@ var app = express();
 var fs = require("fs");
 
 /*
- * +-------+------------+--------+-------------+-----------------------------+
- * | S. N. | URI        | Method | POST body   | Result                      |
- * +-------+------------+--------+-------------+-----------------------------+
- * |     1 | get        | GET    | empty       | Show list of all the items. |
- * |     2 | post       | POST   | JSON String | Add/Update  item.           |
- * |     3 | delete     | DELETE | JSON String | Delete an existing item.    |
- * |     4 | :path      | GET    | empty       | Show details of an item.    |
- * +-------+------------+--------+-------------+-----------------------------+
+ * Rest Api
+ * 
+ * +----+-----+--------+-------------+-----------------------------+
+ * | ID | URI | Method | POST body   | Result                      |
+ * +----+-----+--------+-------------+-----------------------------+
+ * |  1 | /   | GET    | empty       | Show item.                  |
+ * |  2 | /   | POST   | JSON String | Add/Update item.            |
+ * |  3 | /   | DELETE | empty       | Delete an existing item.    |
+ * +----+-----+--------+-------------+-----------------------------+
 */
 
-app.get('/get', function (req, res) {
-   fs.readFile( __dirname + "/" + db_file, db_encoding, function (err, data) {
-       //console.log( data );
-       res.end( data );
-   });
-});
+var api = function() {
+	return [
+		{method: "get",     post: false, comment: "Show Item."},
+		{method: "post",    post: true,  comment: "Add/Update item."},
+		{method: "delete",  post: false, comment: "Delete an existing item."},
+	];
+}
 
-app.get('/get', function (req, res) {
-   fs.readFile( __dirname + "/" + db_file, db_encoding, function (err, data) {
-       //console.log( data );
-       res.end( data );
-   });
+app.get('/', function (req, res) {
+	/*
+	//console.log(req);
+	console.log(req.query);
+	console.log(req.originalUrl);
+	console.log(req.route);
+	//console.log(res);
+	*/
+	fs.readFile( __dirname + "/" + db_file, db_encoding, function (err, data) {
+		//console.log( data );
+		res.end(data);
+	});
 });
 
 /*
