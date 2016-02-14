@@ -4,16 +4,34 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html>
+<html data-ng-app="SimpleApp">
   <head>
-    <title>TODO supply a title</title>
+    <title>Minimal Angual1 App</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-    <div>TODO write content</div>
+    <div data-ng-controller="appController">
+      Name: <input type="text" data-ng-model="searchName" > {{searchName}}
+    
+      <ul>
+	<li data-ng-repeat="item in items | orderBy: 'name' | filter: searchName">{{item.name}} / {{item.location}}</li>
+      </ul>
+    </div>
+    
     <script src="lib/bower_components/angular/angular.js"></script>
     <script>
+      var SimpleApp = angular.module("SimpleApp", []);
+      
+      function appController($scope) {
+	$scope.items = [
+	  {name: "name 1", location: "location 1"},
+	  {name: "name 3", location: "location 3"},
+	  {name: "name 2", location: "location 2"}
+	];
+      };
+      
+      SimpleApp.controller("appController", appController);
       
     </script>
   </body>
