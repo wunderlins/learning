@@ -9,7 +9,8 @@
   "dependencies": {
     "angular": "1.5.0",
     "angular-bootstrap": "1.1.2",
-    "bootstrap-css": "3.3.6"
+    "bootstrap-css": "3.3.6",
+    "angular-route": "1.5.0"
   },
   "devDependencies": {}
 }

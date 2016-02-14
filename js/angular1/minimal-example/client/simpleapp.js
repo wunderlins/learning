@@ -3,8 +3,31 @@
  * Author: Simon Wunderlin
  * Copyright, 2015, simon Wunderlin
  */
-var SimpleApp = angular.module("SimpleApp", ['ui.bootstrap'])
-.factory("appFactory", function() {
+var SimpleApp = angular.module("SimpleApp", ['ui.bootstrap', 'ngRoute']);
+
+SimpleApp.config(['$routeProvider',
+  function($routeProvider) {
+    $routeProvider.
+      when('/', {
+        templateUrl: 'partials/list.html',
+        controller: 'appController'
+      }).
+			/*
+      when('/phones/:phoneId', {
+        templateUrl: 'partials/phone-detail.html',
+        controller: 'PhoneDetailCtrl'
+      }).
+			*/
+      when('/add', {
+        templateUrl: 'partials/add.html',
+        controller: 'appController'
+      }).
+      otherwise({
+        redirectTo: '/'
+      });
+  }]);
+
+SimpleApp.factory("appFactory", function() {
 	var factory = {};
 	var items = [
 		{name: "name 1", location: "location 1"},
@@ -17,8 +40,9 @@ var SimpleApp = angular.module("SimpleApp", ['ui.bootstrap'])
 	};
 	
 	return factory;
-})
-.controller("appController", function ($scope, appFactory) {
+});
+
+SimpleApp.controller("appController", function ($scope, $location, appFactory) {
 	$scope.items = appFactory.getItems();
 	
 	$scope.addItem = function() {
@@ -28,5 +52,6 @@ var SimpleApp = angular.module("SimpleApp", ['ui.bootstrap'])
 		});
 		$scope.newItem.name = "";
 		$scope.newItem.location = "";
+		$location.path('/');
 	};
 });

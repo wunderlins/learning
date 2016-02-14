@@ -1,0 +1,14 @@
+<div data-ng-controller="appController" class="container-fluid">
+	<h1>List of Items</h1>
+	<form class="form-inline">
+		<div class="form-group">
+			<input type="text" id="searchName" data-ng-model="searchName" class="form-control" placeholder="Search">
+		</div>
+	</form>
+
+	<ul>
+		<li data-ng-repeat="item in items| orderBy: 'name' | filter: searchName">{{item.name}} / {{item.location}}</li>
+	</ul>
+	
+	<a class="btn btn-primary" href="#/add">Add Item</a>
+</div>
