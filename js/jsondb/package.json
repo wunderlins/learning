@@ -1,0 +1,6 @@
+{
+  "name": "backend",
+  "dependencies": {
+    "node-json-db": "^0.5.2"
+  }
+}
