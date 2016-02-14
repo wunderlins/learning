@@ -1,8 +1,16 @@
 {
   "name": "minimal-example",
   "version": "1.0.0",
+  "scripts": {
+    "start": "npm run lite",
+    "lite": "lite-server"
+  },
   "keywords": ["util", "functional", "server", "client", "browser"],
   "author": "wus",
   "contributors": [],
-  "dependencies": {}
+  "dependencies": {},  
+  "devDependencies": {
+    "concurrently": "^1.0.0",
+    "lite-server": "^2.0.1"
+  }
 }

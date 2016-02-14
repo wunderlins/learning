@@ -12,7 +12,7 @@ and open the template in the editor.
   </head>
   <body>
     <div data-ng-controller="appController">
-      Name: <input type="text" data-ng-model="searchName" > {{searchName}}
+      Name: <input type="text" data-ng-model="searchName" >
     
       <ul>
 	<li data-ng-repeat="item in items | orderBy: 'name' | filter: searchName">{{item.name}} / {{item.location}}</li>
