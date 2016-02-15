@@ -1,8 +1,10 @@
 {
   "name": "backend",
   "dependencies": {
+    "body-parser": "^1.15.0",
     "colors": "^1.1.2",
     "express": "^4.13.4",
+    "express-json": "^1.0.0",
     "node-json-db": "^0.5.2"
   }
 }
