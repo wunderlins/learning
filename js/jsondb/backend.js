@@ -53,9 +53,9 @@ app.use(bodyParser.json());
 // on startup we check if the required data files are there, if not create 
 // empty json files.
 try {
-	stats = fs.lstatSync(db_file);
-	console.log("Created data store: " + db_file);
+	fs.lstatSync(db_file);
 } catch (e) {
+	console.log(e)
 	fs.writeFile(db_file, "{}", function(err) {
 		if(err) {
 			console.log("Failed to create Datafile.");
@@ -63,6 +63,7 @@ try {
 		}
 	}); 
 	fs.createReadStream(db_file).pipe(fs.createWriteStream(db_file_backup));
+	console.log("Created data store: " + db_file);
 }
 
 /** 
