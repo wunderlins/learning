@@ -1,8 +1,17 @@
 #!/usr/bin/env nodejs
 /**
- * expose json file
- *
- * see http://www.tutorialspoint.com/nodejs/nodejs_restful_api.htm
+ * read/write/delete access via webservie to a json file
+ * 
+ * this service exposes an json file via http. it offers read/write and 
+ * delete capabilities. it is possible to access a part of the json file 
+ * by using url paths to traverse into the data structure.
+ * 
+ * Example data file:
+ * {"a": 1, b: {"b1": 1, "b2": 2}}
+ * 
+ * accessing GET / will return the whole file as seen above.
+ * accessing GET /b will return {"b1": 1, "b2": 2}
+ * accessing an node end like GET/b/b1 will return {"value": 1}
  * 
  * Rest Api
  * +----+----------+--------+-------------+-----------------------------+
@@ -13,16 +22,19 @@
  * |  3 | /?delete | GET    | empty       | Delete an existing item.    |
  * +----+----------+--------+-------------+-----------------------------+
  * 
- * 2015, simon wunderlin
+ * 2016, simon wunderlin
  */
+(function () {
 'use strict';
+var DEBUGGING = false;
 
-var DEBUGGING = true;
+// configuration
+var port           = 8081; // port for the webserver
+var db_file        = "storage.json"; // this is the file with the primary storage
+var db_file_backup = "storage_backup.json"; // this shadow copy is for read access
+var db_encoding    = "utf8"; // content and transfer encoding
 
-var db_file = "storage.json";
-var db_file_backup = "storage_backup.json";
-var db_encoding = "utf8";
-
+// Globals
 var colors = require('colors/safe');
 var express = require('express');
 var app = express();
@@ -39,9 +51,9 @@ app.use(bodyParser.json());
 function get_db() {
 	// https://www.npmjs.com/package/node-json-db
 	var JsonDB = require('node-json-db');
-	//The second argument is used to tell the DB to save after each push 
-	//If you put false, you'll have to call the save() method. 
-	//The third argument is to ask JsonDB to save the database in an human readable 
+	// The second argument is used to tell the DB to save after each push 
+	// If you put false, you'll have to call the save() method. 
+	// The third argument is to ask JsonDB to save the database in an human readable 
 	// format. (default false) 
 	return new JsonDB(db_file.split('.')[0], false, DEBUGGING);
 }
@@ -71,6 +83,14 @@ function handle_request(req, res) {
 		data.url = data.url.substr(0, p);
 	}
 	data.url = decodeURIComponent(data.url);
+	
+	// remove trailing slashes
+	//console.log(data.url.substr(1, data.url.length-2))
+	if (data.url.length > 1)
+		if (data.url.substr(data.url.length-1) == "/")
+			data.url = data.url.substr(0, data.url.length-1);
+	
+	//console.log(data.url)
 	return data;
 }
 
@@ -124,17 +144,20 @@ app.use(function(req, res, next) {
 		
 		var data = {};
 		try {
-			console.log("fetching")
+			//console.log("fetching")
 			data = db.getData(parameter.url);
 		} catch(error) {
 			// if not found, send 404
-			console.log("Error");
+			//console.log("Error");
 			res.status(404).send('<h1>404 File not found.</h1>');
 			return false;			
 		}
 		// if found send json
 		//console.log(data)
-		res.end(JSON.stringify(data));
+		var ret = JSON.stringify(data);
+		if (ret.substr(0, 1) != '{')
+			ret = '{"value":'+ret+'}'
+		res.end(ret);
 		return true;
 	}
 				
@@ -159,7 +182,7 @@ app.use(function(err, req, res, next) {
   res.status(500).send('Something broke!');
 });
 
-var server = app.listen(8081, function () {
+var server = app.listen(port, function () {
 
   var host = server.address().address
   var port = server.address().port
@@ -167,3 +190,5 @@ var server = app.listen(8081, function () {
               colors.red.bold("%s:%s"), host, port)
 
 });
+
+})();
