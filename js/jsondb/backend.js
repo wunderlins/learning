@@ -22,6 +22,11 @@
  * |  3 | /?delete | GET    | empty       | Delete an existing item.    |
  * +----+----------+--------+-------------+-----------------------------+
  * 
+ * Responses may send the following status codes
+ * - 200, element found, action successful
+ * - 404, element not found
+ * - 500, failed to apply change or general server error
+ *
  * 2016, simon wunderlin
  */
 (function () {
