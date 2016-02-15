@@ -50,6 +50,21 @@ var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// on startup we check if the required data files are there, if not create 
+// empty json files.
+try {
+	stats = fs.lstatSync(db_file);
+	console.log("Created data store: " + db_file);
+} catch (e) {
+	fs.writeFile(db_file, "{}", function(err) {
+		if(err) {
+			console.log("Failed to create Datafile.");
+			return console.log(err);
+		}
+	}); 
+	fs.createReadStream(db_file).pipe(fs.createWriteStream(db_file_backup));
+}
+
 /** 
  * Open json as database
  */
@@ -187,13 +202,16 @@ app.use(function(err, req, res, next) {
   res.status(500).send('Something broke!');
 });
 
-var server = app.listen(port, function () {
-
-  var host = server.address().address
-  var port = server.address().port
-  console.log(colors.blue("Backend") + colors.green(" running on: ") + 
-              colors.red.bold("%s:%s"), host, port)
-
-});
+try {
+	var server = app.listen(port, function () {
+		var host = server.address().address
+		var port = server.address().port
+		console.log(colors.blue("Backend") + colors.green(" running on: ") + 
+			          colors.red.bold("%s:%s"), host, port);
+	});
+} catch(error) {
+	console.error("Failed to start server, is there arelady something else listeing on port " + port + "?");
+	console.error(error.stack);
+}
 
 })();
