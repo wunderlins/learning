@@ -1,9 +1,9 @@
-= Webservice to expose json data
+#= Webservice to expose json data
 
-== installation
+## installation
     apt-get install nodejs npm
     cd projetc/dir
     npm install
 
-== starting in bash
+## starting in bash
     ./backend.js
