@@ -1,4 +1,4 @@
-#= Webservice to expose json data
+# Webservice to expose json data
 
 ## installation
     apt-get install nodejs npm
