@@ -139,7 +139,7 @@ if (DEBUGGING) {
 // global url handling
 app.use(function(req, res, next) {
 	//res.status(404).send('Sorry cant find that!');
-	//var parameter = handle_request(req, res);
+	var parameter = handle_request(req, res);
 	//res.send(parameter);
 	
 	res.set('Content-Type', 'application/json;charset=utf-8');
@@ -168,7 +168,7 @@ app.use(function(req, res, next) {
 	if (parameter.method == "GET") {
 		// delete object ?
 		if ("delete" in parameter.query) {
-			console.log("Deleting " + parameter.url);
+			//console.log("Deleting " + parameter.url);
 			try {
 				db.delete(parameter.url);
 				db.save();
