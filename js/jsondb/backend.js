@@ -88,6 +88,17 @@ function store_db(db, path, data) {
 	return true;
 }
 
+/**
+ * get dilesize in bytes
+ *
+ * @param filename String path to file
+ */
+function getFilesizeInBytes(filename) {
+ var stats = fs.statSync(filename);
+ var fileSizeInBytes = stats["size"];
+ return fileSizeInBytes;
+}
+
 function handle_request(req, res) {
 	var data = {
 		//baseUrl: req.baseUrl,
@@ -128,15 +139,22 @@ if (DEBUGGING) {
 // global url handling
 app.use(function(req, res, next) {
 	//res.status(404).send('Sorry cant find that!');
-	var parameter = handle_request(req, res);
+	//var parameter = handle_request(req, res);
 	//res.send(parameter);
-	//console.log(parameter)
+	
+	res.set('Content-Type', 'application/json;charset=utf-8');
+	res.set('X-Powered-By', 'JsonDB Backend');
+	console.log(parameter)
 	
 	// if "/" was requested and method is GET, just send out the shadow copy 
 	// of the file and quit. we do this to prevent locking problems
 	// we expect GET / to be the most common request
 	if ((parameter.url == "" || parameter.url == "/") && 
 	     parameter.method == "GET") {
+		
+		// send length
+		res.set('Content-length', getFilesizeInBytes(db_file_backup));
+		
 		fs.readFile( __dirname + "/" + db_file_backup, db_encoding, function (err, data) {
 			res.end(data);
 		});
@@ -155,6 +173,7 @@ app.use(function(req, res, next) {
 				db.delete(parameter.url);
 				db.save();
 				fs.createReadStream(db_file).pipe(fs.createWriteStream(db_file_backup));
+				res.set('Content-length', 0);
 				res.end("");
 				return true;
 			} catch(error) {
@@ -178,6 +197,8 @@ app.use(function(req, res, next) {
 		var ret = JSON.stringify(data);
 		if (ret.substr(0, 1) != '{')
 			ret = '{"value":'+ret+'}'
+
+		res.set('Content-length', ret.length);
 		res.end(ret);
 		return true;
 	}
